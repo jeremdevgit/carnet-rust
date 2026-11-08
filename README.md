@@ -55,7 +55,7 @@ Isolated integration scenarios cover Nextcloud 35.0.2 WebDAV and Joplin Server 3
 
 ## Validation and remaining work
 
-See [VALIDATION.md](VALIDATION.md) and [SECURITY.md](SECURITY.md). The Windows executable was cross-compiled; native Windows execution has not been verified here. No comparative Windows RAM/CPU measurement or security certification is claimed.
+See [VALIDATION.md](VALIDATION.md) and [SECURITY.md](SECURITY.md). Windows CI compiles and runs the Rust tests natively; the desktop GUI has not been manually verified on a Windows PC. No comparative Windows RAM/CPU measurement or security certification is claimed.
 
 Joplin E2EE, full plugin compatibility, Web Clipper, rich text, OCR, drawings, ENEX/OneNote import, HTML/PDF export, reminders, profile selection and several other features remain unimplemented. This is a functional development milestone, not a completed full rewrite.
 

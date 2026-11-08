@@ -4,7 +4,7 @@ Version : **0.3.0**, développement. La parité Joplin n’est pas atteinte ; vo
 
 | Contrôle | Résultat | Limite |
 | --- | --- | --- |
-| Tests Rust ordinaires | **52 réussis** : 20 bibliothèque, 9 interface, 23 intégrité/échanges | Hôte macOS ; aucun essai natif Windows |
+| Tests Rust ordinaires | **52 réussis** : 20 bibliothèque, 9 interface, 23 intégrité/échanges ; exécutés sur macOS et par GitHub Actions sur Windows | Interface graphique Windows non testée manuellement |
 | Chiffrement | Mode système avec backend de test, clé manquante sans remplacement de données, transitions maître/système/maître, sauvegarde portable restaurée sur un autre profil ; mauvaise phrase, corruption authentifiée, contenu/WAL, migration atomique, schéma malformé, changement de clé, sauvegarde/restauration, identifiants de synchronisation chiffrés | Tests ciblés ; pas d’audit externe |
 | Intégrité | Notes, tâches, tags, sous-carnets, cycles, historique, corbeille/purge, ressources orphelines, brouillons, versions optimistes, import JEX transactionnel et entrées hostiles | JEX : archives construites ; fidélité complète avec Joplin Desktop non certifiée |
 | Interface | Copier/couper/coller Unicode et annuler simulés ; connexion générique, conservation des brouillons, verrouillage et première entrée après inactivité, 8 langues, absence de glyphes manquants, images locales bornées, blocage des images distantes | Accessibilité et comportement réels sous Windows à vérifier |
@@ -13,7 +13,7 @@ Version : **0.3.0**, développement. La parité Joplin n’est pas atteinte ; vo
 | Scénario serveur | Aller-retour notes/carnets/tâches/tags/pièces jointes, conflit et choix, corbeille/suppression, refus E2EE et protection contre cible effacée | Synchronisation expérimentale, instantanés bornés ; partage et E2EE non pris en charge |
 | Rendu | **2 tests supplémentaires réussis**, Linux ARM64 Vulkan/lavapipe ; 5 captures inspectées : clair/sombre FR/EN et création du coffre | Données fictives ; Mica réel non vérifié |
 | Analyse | Clippy tous targets avec `-D warnings` et formatage réussis | Ne prouve pas l’absence de failles |
-| Windows | Compilation release x86_64-pc-windows-gnu, Rust 1.99.0 et MinGW ; SQLCipher/OpenSSL intégrés | Exécution native Windows 10/11, pont presse-papiers et Gestionnaire d’identifiants Windows non vérifiés en situation réelle ; binaire non signé |
+| Windows | Compilation release native x86_64-pc-windows-msvc sur GitHub Actions, Rust 1.99.0 ; SQLCipher/OpenSSL intégrés | Interface graphique Windows 10/11, pont presse-papiers et Gestionnaire d’identifiants Windows non vérifiés en situation réelle ; binaire non signé |
 | Distribution | En-tête PE et DLL importées inspectés, archives contrôlées et SHA-256 fournis | Pilote OpenGL nécessaire ; pas d’installateur signé |
 | Confidentialité | Aucun carnet personnel ni profil réel inclus ; contrôles ciblés de chemins privés et formats courants de secrets | Ne constitue pas une garantie absolue |
 | Publication | Dépôt public `jeremdevgit/carnet-rust` ; workflows Windows et RustSec ; CodeQL, Dependabot et signalement privé activés | Les résultats des vérifications sont consultables dans GitHub Actions et Security ; une coche verte n'est pas une certification de sécurité |
