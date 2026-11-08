@@ -1,4 +1,4 @@
-# Security / Sécurité — 0.3.0
+# Security / Sécurité — 0.4.0
 
 ## Security boundaries (English)
 

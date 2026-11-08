@@ -2,11 +2,13 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet Rust 0.3.0
+# Carnet de notes 0.4.0
+
+<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 Applicazione nativa per appunti Windows di **jeremdevgit**, con interfaccia chiara e scura ispirata a Liquid Glass e otto lingue. Copia, taglia e incolla usano gli appunti del sistema. La connessione è generica per Nextcloud, WebDAV e Joplin Cloud/Server, senza server privati preimpostati. I dati locali sono cifrati con SQLCipher. **La piena parità con Joplin non è ancora disponibile**: consulta [COMPATIBILITY.md](COMPATIBILITY.md).
 
-👉 **[Scarica Carnet Rust per Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetRust-0.3.0-Windows-x64.zip`, applicazione portatile)
+👉 **[Scarica Carnet de notes per Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.0-Windows-x64.zip`, applicazione portatile)
 
 ![Tema scuro con note dimostrative](screenshots/en/liquid-glass-dark.png)
 
@@ -16,7 +18,9 @@ Applicazione nativa per appunti Windows di **jeremdevgit**, con interfaccia chia
 
 ## Avvio e protezione locale
 
-Estrai lo ZIP per Windows e avvia `CarnetRust.exe`. L'uso locale non richiede un account né privilegi di amministratore. L'eseguibile non è firmato e richiede un driver OpenGL funzionante. Su Windows 11 viene richiesto Mica; altrimenti restano disponibili sfumature e pannelli traslucidi.
+Estrai lo ZIP per Windows e avvia `CarnetDeNotes.exe`. L'uso locale non richiede un account né privilegi di amministratore. L'eseguibile non è firmato e richiede un driver OpenGL funzionante. Su Windows 11 viene richiesto Mica; altrimenti restano disponibili sfumature e pannelli traslucidi.
+
+I profili 0.3 restano nella stessa cartella cifrata e mantengono la stessa voce in Gestione credenziali di Windows. Il nuovo eseguibile li apre senza copiare o convertire il profilo.
 
 Per impostazione predefinita, una chiave casuale di SQLCipher viene custodita in **Gestione credenziali di Windows**. Le note restano accessibili senza rete e senza una seconda password. La protezione dipende dalla sicurezza dell'account Windows; non viene richiesta Windows Hello a ogni apertura. Blocca la sessione Windows quando ti allontani. La password dell'account di sincronizzazione non è la chiave del database.
 

@@ -1,4 +1,6 @@
-use super::{App, configure_fonts, glass_frame, paint_glass_background, set_glass_style};
+use super::{
+    App, brand_logo, configure_fonts, glass_frame, paint_glass_background, set_glass_style,
+};
 use carnet_rust::{
     Result,
     i18n::{self, tr},
@@ -210,7 +212,8 @@ impl Desktop {
                 ui.add_space((ui.available_height()*0.03).max(10.0));
                 ui.set_max_width(600.0);
                 glass_frame(true).show(ui,|ui|{
-                    ui.heading("Carnet Rust");
+                    brand_logo(ui, 88.0);
+                    ui.heading("Carnet de notes");
                     ui.label(tr(if setup{"Créer un coffre chiffré"}else{"Déverrouiller le coffre"},lang));
                     if self.state==ProfileState::Plaintext {ui.label(tr("Votre ancien profil sera chiffré sans modifier vos notes.",lang));}
                     let device=carnet_rust::device_key::is_device_managed(&self.path);

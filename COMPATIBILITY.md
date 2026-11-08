@@ -2,7 +2,7 @@
 
 Référence : Joplin Desktop **v3.7.22** (version stable du 28 octobre 2026), inventaire au 7 novembre 2026. Le périmètre vise l'application Windows et ses interactions avec les services/extensions ; aucune application mobile n'est livrée. Ce tableau ne constitue pas une déclaration de compatibilité totale.
 
-| Fonction | État 0.3.0 | Détail / travail restant |
+| Fonction | État 0.4.0 | Détail / travail restant |
 | --- | --- | --- |
 | Interface native Rust | Fonctionnel | egui/eframe + OpenGL, sans Electron |
 | Thème Liquid Glass | Fonctionnel | Clair/sombre, panneaux translucides et reflets statiques ; demande Mica Windows 11, repli dessiné ; pas de réfraction optique dynamique |

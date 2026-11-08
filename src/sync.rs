@@ -434,7 +434,7 @@ impl Api {
             .redirect(reqwest::redirect::Policy::none())
             .timeout(Duration::from_secs(15))
             .connect_timeout(Duration::from_secs(5))
-            .user_agent("CarnetRust/0.3.0")
+            .user_agent(concat!("CarnetDeNotes/", env!("CARGO_PKG_VERSION")))
             .min_tls_version(reqwest::tls::Version::TLS_1_2)
             .build()
             .map_err(|_| Error::Invalid("TLS client"))?;
@@ -474,7 +474,7 @@ impl Api {
                 return Ok(api);
             }
         }
-        let body=Zeroizing::new(serde_json::to_vec(&json!({"email":config.email,"password":config.password,"clientName":"Carnet Rust","clientType":1})).map_err(|_|Error::Invalid("session request"))?);
+        let body=Zeroizing::new(serde_json::to_vec(&json!({"email":config.email,"password":config.password,"clientName":"Carnet de notes","clientType":1})).map_err(|_|Error::Invalid("session request"))?);
         let data = Zeroizing::new(
             api.request("POST", "api/sessions", Some(body.as_slice()), false)?
                 .ok_or(Error::Invalid("session response"))?,

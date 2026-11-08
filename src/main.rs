@@ -418,7 +418,8 @@ impl App {
             .show(ui, |ui| {
                 glass_reflection(ui, self.dark);
                 ui.horizontal_wrapped(|ui| {
-                    ui.heading("Carnet Rust");
+                    brand_logo(ui, 30.0);
+                    ui.heading("Carnet de notes");
                     ui.menu_button(tr("Fichiers", lang), |ui| {
                         for (i, key) in [
                             "Importer Markdown",
@@ -968,7 +969,7 @@ impl App {
             egui::Window::new(tr("À propos", lang))
                 .open(&mut self.about)
                 .show(ctx, |ui| {
-                    ui.heading("Carnet Rust 0.3.0");
+                    ui.heading(format!("Carnet de notes {}", env!("CARGO_PKG_VERSION")));
                     ui.label("© 2026 jeremdevgit · GPL-3.0-or-later");
                     ui.label(tr(
                         "Version de développement : compatibilité Joplin incomplète.",
@@ -1585,6 +1586,7 @@ fn paint_glass_background(ui: &egui::Ui, dark: bool) {
     }
 }
 fn configure_fonts(ctx: &egui::Context) {
+    egui_extras::install_image_loaders(ctx);
     let mut fonts = egui::FontDefinitions::default();
     fonts.font_data.insert(
         "noto-cjk".into(),
@@ -1600,6 +1602,25 @@ fn configure_fonts(ctx: &egui::Context) {
     ctx.set_fonts(fonts);
 }
 
+fn brand_logo(ui: &mut egui::Ui, size: f32) {
+    ui.add(
+        egui::Image::new(egui::include_image!("../assets/carnet-de-notes-256.png"))
+            .fit_to_exact_size(egui::vec2(size, size)),
+    );
+}
+
+fn application_icon() -> egui::IconData {
+    let rgba = image::load_from_memory(include_bytes!("../assets/carnet-de-notes-256.png"))
+        .expect("bundled application icon must be a valid PNG")
+        .to_rgba8();
+    let (width, height) = rgba.dimensions();
+    egui::IconData {
+        rgba: rgba.into_raw(),
+        width,
+        height,
+    }
+}
+
 fn profile_path() -> Result<PathBuf> {
     directories::ProjectDirs::from("org", "jeremdevgit", "CarnetRust")
         .map(|d| d.data_local_dir().to_path_buf())
@@ -1608,9 +1629,10 @@ fn profile_path() -> Result<PathBuf> {
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let profile = profile_path()?;
     eframe::run_native(
-        "Carnet Rust",
+        "Carnet de notes",
         eframe::NativeOptions {
             viewport: egui::ViewportBuilder::default()
+                .with_icon(application_icon())
                 .with_transparent(true)
                 .with_inner_size([1340.0, 860.0])
                 .with_min_inner_size([850.0, 540.0]),
@@ -1626,6 +1648,12 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 mod tests {
     use super::*;
     use egui_kittest::{Harness, kittest::Queryable};
+    #[test]
+    fn bundled_logo_decodes_for_the_native_window() {
+        let icon = application_icon();
+        assert_eq!((icon.width, icon.height), (256, 256));
+        assert_eq!(icon.rgba.len(), 256 * 256 * 4);
+    }
     fn demo(lang: usize, dark: bool) -> App {
         demo_store(Store::memory().unwrap(), lang, dark)
     }

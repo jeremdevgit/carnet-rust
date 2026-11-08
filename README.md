@@ -2,13 +2,15 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet Rust 0.3.0
+# Carnet de notes 0.4.0
+
+<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 Native Windows notebooks by **jeremdevgit**, with a Liquid Glass inspired light/dark interface and eight languages. System text clipboard support is enabled. Generic account connections support Nextcloud, WebDAV and Joplin Cloud/Server. Local data remains SQLCipher encrypted. **Full Joplin parity is not complete**; see [COMPATIBILITY.md](COMPATIBILITY.md).
 
-👉 **[Download Carnet Rust for Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetRust-0.3.0-Windows-x64.zip`, portable application)
+👉 **[Download Carnet de notes for Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.0-Windows-x64.zip`, portable application)
 
-![Carnet Rust dark theme with demonstration notes](screenshots/en/liquid-glass-dark.png)
+![Carnet de notes dark theme with demonstration notes](screenshots/en/liquid-glass-dark.png)
 
 <p><img src="screenshots/en/liquid-glass-light.png" alt="Light theme with demonstration notes" width="49%"> <img src="screenshots/encrypted-vault.png" alt="Encrypted vault setup with a generic Nextcloud account" width="49%"></p>
 
@@ -16,7 +18,9 @@ Native Windows notebooks by **jeremdevgit**, with a Liquid Glass inspired light/
 
 ## Run and unlock
 
-Extract the Windows ZIP and run `CarnetRust.exe`. No administrator rights or account are required for local use. The executable is unsigned and requires an OpenGL desktop driver. Mica is requested on Windows 11; translucent panels and gradients provide a fallback.
+Extract the Windows ZIP and run `CarnetDeNotes.exe`. No administrator rights or account are required for local use. The executable is unsigned and requires an OpenGL desktop driver. Mica is requested on Windows 11; translucent panels and gradients provide a fallback.
+
+Existing 0.3 profiles remain in the same encrypted data directory and keep the same Windows Credential Manager entry. The new executable opens them without copying or converting the profile.
 
 At first launch, choose a service, server address and credentials, then Connect and sync. Nextcloud uses an app password. Uncheck Connect an account for local-only use. No private server or organisation is preconfigured.
 
@@ -75,4 +79,4 @@ cargo build --locked --release
 
 [Public profile: jeremdevgit](https://github.com/jeremdevgit): Suite libre, Batailles de France, Pomme, Ludothèque, rJb, Boîte à outils and [JMeca](https://github.com/jeremdevgit/jmeca).
 
-Original code: GPL-3.0-or-later. Independent implementation; no Joplin source, logo or icon incorporated. Not affiliated with Joplin. Reference: [Joplin Desktop v3.7.22](https://github.com/laurent22/joplin/releases/tag/v3.7.22). Bundled libraries and font retain their own licenses; see LICENSE, THIRD-PARTY-NOTICES.txt and assets/.
+Original code and logo: GPL-3.0-or-later. Independent implementation; no Joplin source, logo or icon incorporated. Not affiliated with Joplin. Reference: [Joplin Desktop v3.7.22](https://github.com/laurent22/joplin/releases/tag/v3.7.22). Bundled libraries and font retain their own licenses; see LICENSE, THIRD-PARTY-NOTICES.txt and assets/.

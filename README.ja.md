@@ -2,11 +2,13 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet Rust 0.3.0
+# Carnet de notes 0.4.0
+
+<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 **jeremdevgit** による Windows 向けネイティブのノートアプリです。Liquid Glass に着想を得たライト／ダークテーマと８言語に対応しています。システムのクリップボードを使ったコピー・切り取り・貼り付けができ、Nextcloud、WebDAV、Joplin Cloud/Server に汎用的に接続します。個人用サーバーは設定済みではありません。ローカルデータは SQLCipher で暗号化します。**Joplin の全機能にはまだ対応していません**。詳しくは [COMPATIBILITY.md](COMPATIBILITY.md) をご覧ください。
 
-👉 **[Carnet Rust の Windows 版をダウンロード](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetRust-0.3.0-Windows-x64.zip`、展開して使うアプリ）
+👉 **[Carnet de notes の Windows 版をダウンロード](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetDeNotes-0.4.0-Windows-x64.zip`、展開して使うアプリ）
 
 ![デモノートを表示したダークテーマ](screenshots/en/liquid-glass-dark.png)
 
@@ -16,7 +18,9 @@
 
 ## 導入とローカル保護
 
-Windows 用 ZIP を展開して `CarnetRust.exe` を起動してください。ローカル利用にアカウントや管理者権限は不要です。実行ファイルは署名されておらず、正常に動作する OpenGL ドライバーが必要です。Windows 11 では Mica を要求し、利用できない場合もグラデーションと半透明パネルを表示します。
+Windows 用 ZIP を展開して `CarnetDeNotes.exe` を起動してください。ローカル利用にアカウントや管理者権限は不要です。実行ファイルは署名されておらず、正常に動作する OpenGL ドライバーが必要です。Windows 11 では Mica を要求し、利用できない場合もグラデーションと半透明パネルを表示します。
+
+既存の 0.3 プロファイルは同じ暗号化データフォルダーと Windows 資格情報マネージャーの登録を引き継ぎます。新しい実行ファイルでコピーや変換をせずに開けます。
 
 標準では、ランダムな SQLCipher 鍵を **Windows 資格情報マネージャー**に保存します。オフラインでも２つ目のパスワードなしでノートを利用できます。この保護は Windows アカウントの安全性に依存し、起動のたびに Windows Hello を要求するものではありません。席を離れるときは Windows をロックしてください。同期アカウントのパスワードはデータベース鍵ではありません。
 

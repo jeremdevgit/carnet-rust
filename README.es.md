@@ -2,19 +2,23 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet Rust 0.3.0
+# Carnet de notes 0.4.0
+
+<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 Aplicación nativa Windows con tema Liquid Glass y ocho idiomas. Incluye copiar/cortar/pegar texto desde el portapapeles del sistema. Conexión genérica con Nextcloud, WebDAV o Joplin Cloud/Server, sin servidor privado predefinido.
 
-👉 **[Descargar Carnet Rust para Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetRust-0.3.0-Windows-x64.zip`, aplicación portátil)
+👉 **[Descargar Carnet de notes para Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.0-Windows-x64.zip`, aplicación portátil)
 
-![Tema oscuro de Carnet Rust con notas de demostración](screenshots/en/liquid-glass-dark.png)
+![Tema oscuro de Carnet de notes con notas de demostración](screenshots/en/liquid-glass-dark.png)
 
 <p><img src="screenshots/en/liquid-glass-light.png" alt="Tema claro con notas de demostración" width="49%"> <img src="screenshots/encrypted-vault.png" alt="Configuración del almacén cifrado con una cuenta Nextcloud genérica" width="49%"></p>
 
 *Capturas de la interfaz real con datos de demostración, tomadas en un entorno de prueba sin pantalla.*
 
-Extrae el ZIP y abre CarnetRust.exe. Por defecto, los datos locales se cifran con SQLCipher y una clave aleatoria guardada en el Administrador de credenciales de Windows. El uso sin conexión no requiere una segunda contraseña. La protección depende de la sesión del sistema; no exige Windows Hello al abrir. Bloquea Windows al dejar el equipo. El bloqueo automático está desactivado en este modo.
+Extrae el ZIP y abre CarnetDeNotes.exe. Por defecto, los datos locales se cifran con SQLCipher y una clave aleatoria guardada en el Administrador de credenciales de Windows. El uso sin conexión no requiere una segunda contraseña. La protección depende de la sesión del sistema; no exige Windows Hello al abrir. Bloquea Windows al dejar el equipo. El bloqueo automático está desactivado en este modo.
+
+Los perfiles 0.3 permanecen en la misma carpeta cifrada y conservan la misma entrada del Administrador de credenciales de Windows. El nuevo ejecutable los abre sin copiar ni convertir el perfil.
 
 La opción de contraseña maestra sigue disponible (mínimo 12 caracteres, sin recuperación). Con ella el bloqueo automático es de 5 minutos; se puede configurar de 0 a 60, donde 0 lo desactiva. Los perfiles 0.2 conservan su contraseña actual y pueden cambiar de modo desde Configuración. Los perfiles locales 0.1 se migran cifrados; no se modifica el perfil oficial Joplin ni se borran físicamente bloques antiguos.
 

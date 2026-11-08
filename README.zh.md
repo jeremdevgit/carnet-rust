@@ -2,11 +2,13 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet Rust 0.3.0
+# Carnet de notes 0.4.0
+
+<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 **jeremdevgit** 开发的 Windows 原生笔记应用，提供受 Liquid Glass 启发的明暗主题和八种语言。支持通过系统剪贴板复制、剪切和粘贴文字，可连接通用 Nextcloud、WebDAV 及 Joplin Cloud/Server 服务，未预设任何私人服务器。本地数据使用 SQLCipher 加密。**目前尚未实现 Joplin 的全部功能**；详情见 [COMPATIBILITY.md](COMPATIBILITY.md)。
 
-👉 **[下载 Windows 版 Carnet Rust](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetRust-0.3.0-Windows-x64.zip`，免安装程序）
+👉 **[下载 Windows 版 Carnet de notes](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetDeNotes-0.4.0-Windows-x64.zip`，免安装程序）
 
 ![包含演示笔记的深色主题](screenshots/en/liquid-glass-dark.png)
 
@@ -16,7 +18,9 @@
 
 ## 安装与本地加密
 
-解压 Windows ZIP 后运行 `CarnetRust.exe`。仅使用本地功能不需要账号或管理员权限。程序未签名，需要可用的 OpenGL 驱动。在 Windows 11 上会尝试启用 Mica；否则仍可使用渐变和半透明面板。
+解压 Windows ZIP 后运行 `CarnetDeNotes.exe`。仅使用本地功能不需要账号或管理员权限。程序未签名，需要可用的 OpenGL 驱动。在 Windows 11 上会尝试启用 Mica；否则仍可使用渐变和半透明面板。
+
+现有 0.3 配置仍位于同一加密数据目录，并沿用 Windows 凭据管理器中的原有条目。新程序无需复制或转换配置即可打开它们。
 
 默认情况下，随机生成的 SQLCipher 密钥保存在 **Windows 凭据管理器**中。因此离线使用无需再输入一个密码。这种保护依赖 Windows 账户的安全性，程序不会在每次启动时要求 Windows Hello。离开电脑时请锁定 Windows。同步账户密码不会用作数据库密钥。
 

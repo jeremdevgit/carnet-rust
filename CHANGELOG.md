@@ -1,5 +1,11 @@
 # Changelog / Historique
 
+## 0.4.0 — 2026-11-08 (development / développement)
+
+Français : le nom public devient **Carnet de notes**. Nouveau logo original au format vectoriel, intégré à la fenêtre et aux ressources de l’exécutable Windows, avec métadonnées éditeur `jeremdevgit`. Le nom de l’exécutable et de l’archive change ; le chemin du profil chiffré et l’identifiant du coffre système restent identiques pour retrouver les données existantes.
+
+English: the public name is now **Carnet de notes**. An original vector logo is embedded in the window and Windows executable resources, with `jeremdevgit` publisher metadata. The executable and archive names change; the encrypted profile path and OS credential identifier remain stable so existing data stays accessible.
+
 ## 0.3.0 — 2026-11-08 (development / développement)
 
 Français : presse-papiers système pour copier/couper/coller du texte ; connexion générique Nextcloud/WebDAV et Joplin Cloud/Server, sans adresse privée prédéfinie ; mode système par défaut avec clé locale SQLCipher aléatoire conservée dans les identifiants OS, mot de passe maître optionnel et conversion vérifiée ; sauvegarde portable avec mot de passe propre ; synchronisation après ouverture et toutes les cinq minutes tant que le coffre reste ouvert. Écritures WebDAV conditionnées par ETag, chemins/listes XML bornés, refus E2EE préservé. Tests Nextcloud 35.0.2 et Joplin Server 3.7.1 isolés.

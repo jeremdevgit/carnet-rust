@@ -2,13 +2,15 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet Rust 0.3.0
+# Carnet de notes 0.4.0
+
+<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 Application native de notes Windows, par **jeremdevgit**, avec un thème inspiré de **Liquid Glass**, en huit langues. Copier/couper/coller du texte utilise maintenant le presse-papiers système. Connexion générique Nextcloud, WebDAV ou Joplin Cloud/Server, sans serveur personnel prédéfini. Le stockage local reste chiffré avec SQLCipher. **La parité complète avec Joplin n'est pas encore atteinte** : [suivi détaillé](COMPATIBILITY.md).
 
-👉 **[Télécharger Carnet Rust pour Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetRust-0.3.0-Windows-x64.zip`, application portable)
+👉 **[Télécharger Carnet de notes pour Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.0-Windows-x64.zip`, application portable)
 
-![Thème sombre de Carnet Rust avec des notes de démonstration](screenshots/en/liquid-glass-dark.png)
+![Thème sombre de Carnet de notes avec des notes de démonstration](screenshots/en/liquid-glass-dark.png)
 
 <p><img src="screenshots/en/liquid-glass-light.png" alt="Thème clair avec notes de démonstration" width="49%"> <img src="screenshots/encrypted-vault.png" alt="Création du coffre chiffré avec un compte Nextcloud générique" width="49%"></p>
 
@@ -16,7 +18,9 @@ Application native de notes Windows, par **jeremdevgit**, avec un thème inspir�
 
 ## Démarrer
 
-Extraire le ZIP Windows, puis ouvrir `CarnetRust.exe`. Aucun compte ni droit administrateur requis pour les fonctions locales. L'exécutable n'est pas signé et nécessite un pilote OpenGL opérationnel. Windows 11 peut fournir le fond Mica ; sinon les dégradés et panneaux translucides restent disponibles.
+Extraire le ZIP Windows, puis ouvrir `CarnetDeNotes.exe`. Aucun compte ni droit administrateur requis pour les fonctions locales. L'exécutable n'est pas signé et nécessite un pilote OpenGL opérationnel. Windows 11 peut fournir le fond Mica ; sinon les dégradés et panneaux translucides restent disponibles.
+
+Les profils 0.3 restent dans le même dossier chiffré et conservent la même entrée du Gestionnaire d’identifiants Windows. Le nouvel exécutable les ouvre sans copie ni conversion du profil.
 
 Au premier lancement, choisir son service et saisir l’adresse et les identifiants, puis **Se connecter et synchroniser**. Le mot de passe d’application Nextcloud est recommandé pour Nextcloud. Pour utiliser uniquement les fonctions locales, décocher **Se connecter à un compte**.
 
@@ -67,7 +71,7 @@ Les changements concurrents produisent des conflits à résoudre dans l'interfac
 
 Voir [VALIDATION.md](VALIDATION.md) et [SECURITY.md](SECURITY.md). Le binaire Windows a été compilé, mais n'a pas été exécuté sur un Windows réel ici. Il n'y a pas encore de mesure comparable de RAM/CPU contre Joplin, de certification de sécurité ni de garantie d'invulnérabilité.
 
-Restent notamment : E2EE Joplin, extensions, Web Clipper, éditeur riche, OCR, dessin, imports ENEX/OneNote, exports HTML/PDF et notifications. La version 0.3.0 est une étape fonctionnelle ; elle ne doit pas être présentée comme une réécriture complète achevée.
+Restent notamment : E2EE Joplin, extensions, Web Clipper, éditeur riche, OCR, dessin, imports ENEX/OneNote, exports HTML/PDF et notifications. La version 0.4.0 est une étape fonctionnelle ; elle ne doit pas être présentée comme une réécriture complète achevée.
 
 ## Compiler
 
@@ -79,7 +83,7 @@ cargo clippy --locked --all-targets -- -D warnings
 cargo build --locked --release
 ```
 
-Le programme est dans `target/release/CarnetRust.exe`. Le workflow Windows construit un artefact sans publier de Release. Le script `tools/package.ps1` prépare le ZIP portable.
+Le programme est dans `target/release/CarnetDeNotes.exe`. Le workflow Windows construit un artefact sans publier de Release. Le script `tools/package.ps1` prépare le ZIP portable.
 
 ## Mes logiciels
 

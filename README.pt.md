@@ -2,11 +2,13 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet Rust 0.3.0
+# Carnet de notes 0.4.0
+
+<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 Aplicativo nativo de notas para Windows, criado por **jeremdevgit**, com tema claro e escuro inspirado em Liquid Glass e oito idiomas. Copiar, recortar e colar usam a área de transferência do sistema. Há conexão genérica com Nextcloud, WebDAV e Joplin Cloud/Server, sem servidor privado predefinido. Os dados locais são criptografados com SQLCipher. **A paridade completa com o Joplin ainda não foi alcançada**; veja [COMPATIBILITY.md](COMPATIBILITY.md).
 
-👉 **[Baixar Carnet Rust para Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetRust-0.3.0-Windows-x64.zip`, aplicativo portátil)
+👉 **[Baixar Carnet de notes para Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.0-Windows-x64.zip`, aplicativo portátil)
 
 ![Tema escuro com notas de demonstração](screenshots/en/liquid-glass-dark.png)
 
@@ -16,7 +18,9 @@ Aplicativo nativo de notas para Windows, criado por **jeremdevgit**, com tema cl
 
 ## Instalação e proteção local
 
-Extraia o ZIP para Windows e execute `CarnetRust.exe`. O uso local não exige conta nem privilégios de administrador. O executável não é assinado e precisa de um driver OpenGL funcional. No Windows 11, o aplicativo solicita Mica; caso contrário, gradientes e painéis translúcidos continuam disponíveis.
+Extraia o ZIP para Windows e execute `CarnetDeNotes.exe`. O uso local não exige conta nem privilégios de administrador. O executável não é assinado e precisa de um driver OpenGL funcional. No Windows 11, o aplicativo solicita Mica; caso contrário, gradientes e painéis translúcidos continuam disponíveis.
+
+Os perfis 0.3 permanecem na mesma pasta criptografada e mantêm a mesma entrada no Gerenciador de Credenciais do Windows. O novo executável os abre sem copiar ou converter o perfil.
 
 Por padrão, uma chave aleatória do SQLCipher é guardada no **Gerenciador de Credenciais do Windows**. As notas continuam acessíveis sem internet e sem uma segunda senha. Essa proteção depende da segurança da conta do Windows; o Windows Hello não é solicitado a cada abertura. Bloqueie a sessão do Windows quando se afastar. A senha da conta de sincronização não é a chave do banco de dados.
 
