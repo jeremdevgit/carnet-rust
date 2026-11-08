@@ -33,3 +33,7 @@ El ejecutable fue compilado para Windows, sin firma; ejecución nativa y Gestor 
 Compilar: Rust 1.95+, herramientas C++ y Perl; cargo test --locked, cargo clippy --locked --all-targets -- -D warnings, cargo build --locked --release.
 
 Código original GPL-3.0-or-later. Proyecto independiente, sin afiliación con Joplin. Autor público: [jeremdevgit](https://github.com/jeremdevgit). Licencias en THIRD-PARTY-NOTICES.txt y assets/.
+
+## Mis programas
+
+[JMeca](https://github.com/jeremdevgit/jmeca): mantenimiento de vehículos cifrado para Windows, macOS y Linux, disponible en 8 idiomas.
