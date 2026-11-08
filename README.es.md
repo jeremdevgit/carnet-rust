@@ -1,8 +1,18 @@
 [English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
 
+[![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
+
 # Carnet Rust 0.3.0
 
 Aplicación nativa Windows con tema Liquid Glass y ocho idiomas. Incluye copiar/cortar/pegar texto desde el portapapeles del sistema. Conexión genérica con Nextcloud, WebDAV o Joplin Cloud/Server, sin servidor privado predefinido.
+
+👉 **[Descargar Carnet Rust para Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetRust-0.3.0-Windows-x64.zip`, aplicación portátil)
+
+![Tema oscuro de Carnet Rust con notas de demostración](screenshots/en/liquid-glass-dark.png)
+
+<p><img src="screenshots/en/liquid-glass-light.png" alt="Tema claro con notas de demostración" width="49%"> <img src="screenshots/encrypted-vault.png" alt="Configuración del almacén cifrado con una cuenta Nextcloud genérica" width="49%"></p>
+
+*Capturas de la interfaz real con datos de demostración, tomadas en un entorno de prueba sin pantalla.*
 
 Extrae el ZIP y abre CarnetRust.exe. Por defecto, los datos locales se cifran con SQLCipher y una clave aleatoria guardada en el Administrador de credenciales de Windows. El uso sin conexión no requiere una segunda contraseña. La protección depende de la sesión del sistema; no exige Windows Hello al abrir. Bloquea Windows al dejar el equipo. El bloqueo automático está desactivado en este modo.
 

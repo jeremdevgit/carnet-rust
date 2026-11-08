@@ -1,8 +1,18 @@
 [English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
 
+[![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
+
 # Carnet Rust 0.3.0
 
 Application native de notes Windows, par **jeremdevgit**, avec un thème inspiré de **Liquid Glass**, en huit langues. Copier/couper/coller du texte utilise maintenant le presse-papiers système. Connexion générique Nextcloud, WebDAV ou Joplin Cloud/Server, sans serveur personnel prédéfini. Le stockage local reste chiffré avec SQLCipher. **La parité complète avec Joplin n'est pas encore atteinte** : [suivi détaillé](COMPATIBILITY.md).
+
+👉 **[Télécharger Carnet Rust pour Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetRust-0.3.0-Windows-x64.zip`, application portable)
+
+![Thème sombre de Carnet Rust avec des notes de démonstration](screenshots/en/liquid-glass-dark.png)
+
+<p><img src="screenshots/en/liquid-glass-light.png" alt="Thème clair avec notes de démonstration" width="49%"> <img src="screenshots/encrypted-vault.png" alt="Création du coffre chiffré avec un compte Nextcloud générique" width="49%"></p>
+
+*Captures de la véritable interface avec des données de démonstration, prises dans un environnement de rendu hors écran.*
 
 ## Démarrer
 

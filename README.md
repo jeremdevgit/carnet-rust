@@ -1,8 +1,18 @@
 [English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
 
+[![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
+
 # Carnet Rust 0.3.0
 
 Native Windows notebooks by **jeremdevgit**, with a Liquid Glass inspired light/dark interface and eight languages. System text clipboard support is enabled. Generic account connections support Nextcloud, WebDAV and Joplin Cloud/Server. Local data remains SQLCipher encrypted. **Full Joplin parity is not complete**; see [COMPATIBILITY.md](COMPATIBILITY.md).
+
+👉 **[Download Carnet Rust for Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetRust-0.3.0-Windows-x64.zip`, portable application)
+
+![Carnet Rust dark theme with demonstration notes](screenshots/en/liquid-glass-dark.png)
+
+<p><img src="screenshots/en/liquid-glass-light.png" alt="Light theme with demonstration notes" width="49%"> <img src="screenshots/encrypted-vault.png" alt="Encrypted vault setup with a generic Nextcloud account" width="49%"></p>
+
+*Screenshots show the real interface with demonstration data; they were captured in an offscreen test environment.*
 
 ## Run and unlock
 

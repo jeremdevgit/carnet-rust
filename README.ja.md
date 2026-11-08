@@ -1,8 +1,18 @@
 [English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
 
+[![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
+
 # Carnet Rust 0.3.0
 
 **jeremdevgit** による Windows 向けネイティブのノートアプリです。Liquid Glass に着想を得たライト／ダークテーマと８言語に対応しています。システムのクリップボードを使ったコピー・切り取り・貼り付けができ、Nextcloud、WebDAV、Joplin Cloud/Server に汎用的に接続します。個人用サーバーは設定済みではありません。ローカルデータは SQLCipher で暗号化します。**Joplin の全機能にはまだ対応していません**。詳しくは [COMPATIBILITY.md](COMPATIBILITY.md) をご覧ください。
+
+👉 **[Carnet Rust の Windows 版をダウンロード](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetRust-0.3.0-Windows-x64.zip`、展開して使うアプリ）
+
+![デモノートを表示したダークテーマ](screenshots/en/liquid-glass-dark.png)
+
+<p><img src="screenshots/en/liquid-glass-light.png" alt="デモノートを表示したライトテーマ" width="49%"> <img src="screenshots/encrypted-vault.png" alt="暗号化保管庫の設定画面" width="49%"></p>
+
+*スクリーンショットはデモデータを使用した実際の画面を、オフスクリーンのテスト環境で撮影したものです。*
 
 ## 導入とローカル保護
 

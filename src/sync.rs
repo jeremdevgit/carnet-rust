@@ -1212,11 +1212,14 @@ mod tests {
         for f in std::fs::read_dir(dir.path()).unwrap() {
             let p = f.unwrap().path();
             if p.is_file() {
-                // SQLite's shared-memory file has locked byte ranges on Windows.
-                if cfg!(windows) && p.to_string_lossy().ends_with("-shm") {
+                // These control files are not encrypted content and carry
+                // active byte-range locks on Windows.
+                let name = p.file_name().unwrap().to_string_lossy();
+                if name == "profile.lock" || name.ends_with("-shm") {
                     continue;
                 }
-                let data = std::fs::read(p).unwrap();
+                let data = std::fs::read(&p)
+                    .unwrap_or_else(|e| panic!("cannot inspect {}: {e}", p.display()));
                 for value in [&config.email, &config.password] {
                     assert!(!data.windows(value.len()).any(|b| b == value.as_bytes()));
                 }

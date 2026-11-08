@@ -1,8 +1,18 @@
 [English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
 
+[![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
+
 # Carnet Rust 0.3.0
 
 Native Notizbuch-App für Windows von **jeremdevgit**, mit einer von Liquid Glass inspirierten hellen und dunklen Oberfläche in acht Sprachen. Die App unterstützt Kopieren, Ausschneiden und Einfügen über die Zwischenablage des Systems. Sie kann sich mit Nextcloud, WebDAV und Joplin Cloud/Server verbinden. Es ist kein privater Server voreingestellt. Die lokalen Daten werden mit SQLCipher verschlüsselt. **Die vollständige Funktionsgleichheit mit Joplin ist noch nicht erreicht**; Einzelheiten stehen in [COMPATIBILITY.md](COMPATIBILITY.md).
+
+👉 **[Carnet Rust für Windows herunterladen](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetRust-0.3.0-Windows-x64.zip`, portable App)
+
+![Dunkles Design mit Beispielnotizen](screenshots/en/liquid-glass-dark.png)
+
+<p><img src="screenshots/en/liquid-glass-light.png" alt="Helles Design mit Beispielnotizen" width="49%"> <img src="screenshots/encrypted-vault.png" alt="Einrichtung des verschlüsselten Tresors" width="49%"></p>
+
+*Die Aufnahmen zeigen die echte Oberfläche mit Beispieldaten aus einer bildschirmlosen Testumgebung.*
 
 ## Installation und lokaler Tresor
 

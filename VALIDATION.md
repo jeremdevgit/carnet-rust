@@ -16,7 +16,7 @@ Version : **0.3.0**, développement. La parité Joplin n’est pas atteinte ; vo
 | Windows | Compilation release x86_64-pc-windows-gnu, Rust 1.99.0 et MinGW ; SQLCipher/OpenSSL intégrés | Exécution native Windows 10/11, pont presse-papiers et Gestionnaire d’identifiants Windows non vérifiés en situation réelle ; binaire non signé |
 | Distribution | En-tête PE et DLL importées inspectés, archives contrôlées et SHA-256 fournis | Pilote OpenGL nécessaire ; pas d’installateur signé |
 | Confidentialité | Aucun carnet personnel ni profil réel inclus ; contrôles ciblés de chemins privés et formats courants de secrets | Ne constitue pas une garantie absolue |
-| Publication | Aucune publication GitHub | Livrables locaux uniquement |
+| Publication | Dépôt public `jeremdevgit/carnet-rust` ; workflows Windows et RustSec ; CodeQL, Dependabot et signalement privé activés | Les résultats des vérifications sont consultables dans GitHub Actions et Security ; une coche verte n'est pas une certification de sécurité |
 
 Total : **56 tests réussis** sur les quatre exécutions (52 ordinaires + 1 Nextcloud + 1 Joplin Server + 2 rendu). Les quatre tests dépendant d’un serveur ou GPU restent volontairement ignorés dans la commande ordinaire.
 

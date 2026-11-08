@@ -1,8 +1,18 @@
 [English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
 
+[![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
+
 # Carnet Rust 0.3.0
 
 **jeremdevgit** 开发的 Windows 原生笔记应用，提供受 Liquid Glass 启发的明暗主题和八种语言。支持通过系统剪贴板复制、剪切和粘贴文字，可连接通用 Nextcloud、WebDAV 及 Joplin Cloud/Server 服务，未预设任何私人服务器。本地数据使用 SQLCipher 加密。**目前尚未实现 Joplin 的全部功能**；详情见 [COMPATIBILITY.md](COMPATIBILITY.md)。
+
+👉 **[下载 Windows 版 Carnet Rust](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetRust-0.3.0-Windows-x64.zip`，免安装程序）
+
+![包含演示笔记的深色主题](screenshots/en/liquid-glass-dark.png)
+
+<p><img src="screenshots/en/liquid-glass-light.png" alt="包含演示笔记的浅色主题" width="49%"> <img src="screenshots/encrypted-vault.png" alt="加密库设置界面" width="49%"></p>
+
+*截图来自使用演示数据的真实界面，在无屏幕测试环境中采集。*
 
 ## 安装与本地加密
 

@@ -286,12 +286,14 @@ mod tests {
             if !p.is_file() {
                 continue;
             }
-            // Windows applies byte-range locks to SQLite's shared-memory file.
-            // The encrypted database and WAL remain readable for this assertion.
-            if cfg!(windows) && p.to_string_lossy().ends_with("-shm") {
+            // These are control files, not encrypted content. Windows also
+            // rejects reads through their active byte-range locks.
+            let name = p.file_name().unwrap().to_string_lossy();
+            if name == "profile.lock" || name.ends_with("-shm") {
                 continue;
             }
-            let data = std::fs::read(&p).unwrap();
+            let data =
+                std::fs::read(&p).unwrap_or_else(|e| panic!("cannot inspect {}: {e}", p.display()));
             for secret in [
                 "Private notebook sentinel",
                 "Private title sentinel",

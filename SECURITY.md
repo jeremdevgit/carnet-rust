@@ -52,4 +52,6 @@ Rust et les limites d'entrée réduisent des risques ; ils ne garantissent pas l
 
 ## Reporting
 
-Do not post private note contents, vault passphrases or account credentials publicly. A dedicated private-reporting endpoint has not been created yet. Once a public repository exists with GitHub private vulnerability reporting enabled, use that channel. No repository or publication was created during this work.
+Do not post private note contents, vault passphrases or account credentials publicly. Report suspected vulnerabilities through [GitHub private vulnerability reporting](https://github.com/jeremdevgit/carnet-rust/security/advisories/new). Dependabot alerts and security updates, secret scanning with push protection, RustSec dependency auditing and CodeQL analysis are enabled for this repository. A green check reports the result of a particular scan; it does not certify the application or guarantee that no vulnerability exists.
+
+Ne publiez pas vos notes, phrases de passe ou identifiants dans un ticket public. Signalez une faille présumée par le [canal privé GitHub](https://github.com/jeremdevgit/carnet-rust/security/advisories/new). Les contrôles automatiques indiquent ce qu'ils ont effectivement analysé ; une coche verte ne certifie pas que le logiciel est exempt de failles.

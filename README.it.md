@@ -1,8 +1,18 @@
 [English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
 
+[![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
+
 # Carnet Rust 0.3.0
 
 Applicazione nativa per appunti Windows di **jeremdevgit**, con interfaccia chiara e scura ispirata a Liquid Glass e otto lingue. Copia, taglia e incolla usano gli appunti del sistema. La connessione è generica per Nextcloud, WebDAV e Joplin Cloud/Server, senza server privati preimpostati. I dati locali sono cifrati con SQLCipher. **La piena parità con Joplin non è ancora disponibile**: consulta [COMPATIBILITY.md](COMPATIBILITY.md).
+
+👉 **[Scarica Carnet Rust per Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetRust-0.3.0-Windows-x64.zip`, applicazione portatile)
+
+![Tema scuro con note dimostrative](screenshots/en/liquid-glass-dark.png)
+
+<p><img src="screenshots/en/liquid-glass-light.png" alt="Tema chiaro con note dimostrative" width="49%"> <img src="screenshots/encrypted-vault.png" alt="Configurazione del contenitore cifrato" width="49%"></p>
+
+*Le immagini mostrano l'interfaccia reale con dati dimostrativi, acquisita in un ambiente di test senza schermo.*
 
 ## Avvio e protezione locale
 
