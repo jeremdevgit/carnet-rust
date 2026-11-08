@@ -1212,6 +1212,10 @@ mod tests {
         for f in std::fs::read_dir(dir.path()).unwrap() {
             let p = f.unwrap().path();
             if p.is_file() {
+                // SQLite's shared-memory file has locked byte ranges on Windows.
+                if cfg!(windows) && p.to_string_lossy().ends_with("-shm") {
+                    continue;
+                }
                 let data = std::fs::read(p).unwrap();
                 for value in [&config.email, &config.password] {
                     assert!(!data.windows(value.len()).any(|b| b == value.as_bytes()));
