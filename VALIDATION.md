@@ -4,7 +4,7 @@ Version : **0.4.0**, développement. La parité Joplin n’est pas atteinte ; vo
 
 | Contrôle | Résultat | Limite |
 | --- | --- | --- |
-| Tests Rust ordinaires | **53 réussis** : 20 bibliothèque, 10 interface, 23 intégrité/échanges ; exécutés sur macOS. La version 0.3 a également passé GitHub Actions sur Windows | Interface graphique Windows non testée manuellement ; nouvelle version 0.4 à confirmer par CI Windows |
+| Tests Rust ordinaires | **53 réussis** : 20 bibliothèque, 10 interface, 23 intégrité/échanges ; exécutés sur macOS et par GitHub Actions sur Windows | Interface graphique Windows non testée manuellement |
 | Chiffrement | Mode système avec backend de test, clé manquante sans remplacement de données, transitions maître/système/maître, sauvegarde portable restaurée sur un autre profil ; mauvaise phrase, corruption authentifiée, contenu/WAL, migration atomique, schéma malformé, changement de clé, sauvegarde/restauration, identifiants de synchronisation chiffrés | Tests ciblés ; pas d’audit externe |
 | Intégrité | Notes, tâches, tags, sous-carnets, cycles, historique, corbeille/purge, ressources orphelines, brouillons, versions optimistes, import JEX transactionnel et entrées hostiles | JEX : archives construites ; fidélité complète avec Joplin Desktop non certifiée |
 | Interface | Copier/couper/coller Unicode et annuler simulés ; connexion générique, conservation des brouillons, verrouillage et première entrée après inactivité, 8 langues, absence de glyphes manquants, images locales bornées, blocage des images distantes ; décodage du nouveau logo | Accessibilité et comportement réels sous Windows à vérifier |
@@ -14,9 +14,9 @@ Version : **0.4.0**, développement. La parité Joplin n’est pas atteinte ; vo
 | Rendu | **2 tests supplémentaires réussis**, Linux ARM64 Vulkan/lavapipe ; 5 captures régénérées et inspectées : clair/sombre FR/EN et création du coffre avec le nouveau nom et logo | Données fictives ; Mica réel non vérifié |
 | Analyse | Clippy tous targets avec `-D warnings` et formatage réussis | Ne prouve pas l’absence de failles |
 | Windows | Compilation release native x86_64-pc-windows-msvc sur GitHub Actions, Rust 1.99.0 ; SQLCipher/OpenSSL intégrés | Interface graphique Windows 10/11, pont presse-papiers et Gestionnaire d’identifiants Windows non vérifiés en situation réelle ; binaire non signé |
-| Distribution | En-tête PE et DLL importées inspectés, archives contrôlées et SHA-256 fournis | Pilote OpenGL nécessaire ; pas d’installateur signé |
+| Distribution | Exécutable PE Windows GUI contrôlé ; sept tailles d’icône, groupe ICO et métadonnées `Carnet de notes` / `jeremdevgit` présents ; ZIP et SHA-256 du workflow vérifiés | Pilote OpenGL nécessaire ; les métadonnées éditeur ne sont pas une signature numérique |
 | Confidentialité | Aucun carnet personnel ni profil réel inclus ; contrôles ciblés de chemins privés et formats courants de secrets | Ne constitue pas une garantie absolue |
-| Publication | Dépôt public `jeremdevgit/carnet-rust` ; workflows Windows et RustSec ; CodeQL, Dependabot et signalement privé activés | Les résultats des vérifications sont consultables dans GitHub Actions et Security ; une coche verte n'est pas une certification de sécurité |
+| Publication | Dépôt public `jeremdevgit/carnet-rust` ; workflows Windows et RustSec ; CodeQL étendu, Dependabot, analyse IA des PR, protection de `main` et signalement privé activés | Aucun scan IA complet facturable lancé ; une coche verte n'est pas une certification de sécurité |
 
 Total : **57 tests réussis** sur les quatre exécutions (53 ordinaires + 1 Nextcloud + 1 Joplin Server + 2 rendu). Les quatre tests dépendant d’un serveur ou GPU restent volontairement ignorés dans la commande ordinaire.
 
