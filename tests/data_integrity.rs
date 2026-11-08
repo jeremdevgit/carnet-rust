@@ -14,10 +14,15 @@ fn archive(path: &Path, files: &[(&str, &[u8])]) {
     let mut t = tar::Builder::new(f);
     for (p, b) in files {
         let mut h = tar::Header::new_gnu();
+        // Write the raw tar name: append_data rejects Windows drive paths on
+        // Windows before the importer gets a chance to inspect them.
+        assert!(p.is_ascii() && p.len() < 100);
+        h.as_mut_bytes()[..100].fill(0);
+        h.as_mut_bytes()[..p.len()].copy_from_slice(p.as_bytes());
         h.set_size(b.len() as u64);
         h.set_mode(0o600);
         h.set_cksum();
-        t.append_data(&mut h, p, *b).unwrap();
+        t.append(&h, *b).unwrap();
     }
     t.finish().unwrap();
 }
