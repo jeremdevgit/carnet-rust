@@ -73,6 +73,6 @@ cargo build --locked --release
 
 ## My software and license
 
-[Public profile: jeremdevgit](https://github.com/jeremdevgit): Suite libre, Batailles de France, Pomme, Ludothèque, rJb and Boîte à outils.
+[Public profile: jeremdevgit](https://github.com/jeremdevgit): Suite libre, Batailles de France, Pomme, Ludothèque, rJb, Boîte à outils and [JMeca](https://github.com/jeremdevgit/jmeca).
 
 Original code: GPL-3.0-or-later. Independent implementation; no Joplin source, logo or icon incorporated. Not affiliated with Joplin. Reference: [Joplin Desktop v3.7.22](https://github.com/laurent22/joplin/releases/tag/v3.7.22). Bundled libraries and font retain their own licenses; see LICENSE, THIRD-PARTY-NOTICES.txt and assets/.
