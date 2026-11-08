@@ -1,0 +1,12 @@
+/target/
+/dist/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.jex
+*.lock.tmp
+.DS_Store
+.superpowers/
+.outils-trad/
+claude/
+dev/ref/

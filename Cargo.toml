@@ -1,0 +1,57 @@
+[package]
+name = "carnet-rust"
+version = "0.3.0"
+edition = "2024"
+rust-version = "1.95"
+license = "GPL-3.0-or-later"
+description = "Native offline notebook for Windows, by jeremdevgit. Early development."
+publish = false
+
+[features]
+default = ["desktop"]
+desktop = ["dep:eframe", "dep:rfd", "dep:egui_commonmark", "dep:sys-locale", "dep:window-vibrancy", "dep:egui_extras"]
+
+[dependencies]
+rusqlite = { version = "0.41.1", features = ["bundled-sqlcipher-vendored-openssl", "backup"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+zeroize = "1.8"
+reqwest = { version = "0.13", default-features = false, features = ["blocking", "json", "rustls-no-provider"] }
+sha2 = "0.10"
+quick-xml = "0.42"
+keyring = { version = "3.6.3", default-features = false, features = ["apple-native", "windows-native"] }
+rustls = { version = "0.23", default-features = false, features = ["std", "ring", "tls12"] }
+uuid = { version = "1", features = ["v4"] }
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+directories = "6"
+fs2 = "0.4"
+tar = "0.4.46"
+pulldown-cmark = "0.13"
+tempfile = "3"
+eframe = { version = "0.37", optional = true, default-features = false, features = ["glow", "default_fonts", "x11", "wayland", "accesskit", "clipboard"] }
+image = { version = "0.25.10", default-features = false, features = ["png", "jpeg"] }
+egui_extras = { version = "0.37", optional = true, default-features = false, features = ["image"] }
+egui_commonmark = { version = "0.26", optional = true, default-features = false }
+rfd = { version = "0.17", optional = true }
+sys-locale = { version = "0.3", optional = true }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+window-vibrancy = { version = "0.8", optional = true }
+
+[dev-dependencies]
+egui_kittest = { version = "0.37", features = ["snapshot", "wgpu"] }
+
+[[bin]]
+name = "CarnetRust"
+path = "src/main.rs"
+required-features = ["desktop"]
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = true
+
+[lints.rust]
+unsafe_code = "forbid"
