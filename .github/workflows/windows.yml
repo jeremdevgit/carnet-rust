@@ -3,7 +3,27 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    paths:
+      - .github/workflows/windows.yml
+      - Cargo.toml
+      - Cargo.lock
+      - src/**
+      - tests/**
+      - assets/**
+      - tools/package.ps1
   pull_request:
+    paths:
+      - .github/workflows/windows.yml
+      - Cargo.toml
+      - Cargo.lock
+      - src/**
+      - tests/**
+      - assets/**
+      - tools/package.ps1
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 jobs:
