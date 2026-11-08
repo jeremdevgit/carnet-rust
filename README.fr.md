@@ -83,6 +83,6 @@ Le programme est dans `target/release/CarnetRust.exe`. Le workflow Windows const
 
 ## Mes logiciels
 
-[Profil public jeremdevgit](https://github.com/jeremdevgit) : Suite libre, Batailles de France, Pomme, Ludothèque, rJb et Boîte à outils.
+[Profil public jeremdevgit](https://github.com/jeremdevgit) : Suite libre, Batailles de France, Pomme, Ludothèque, rJb, Boîte à outils et [JMeca](https://github.com/jeremdevgit/jmeca).
 
 Code original GPL-3.0-or-later. Aucun code source, logo ou icône Joplin incorporé. Projet indépendant, sans affiliation à Joplin. Référence fonctionnelle : [Joplin Desktop v3.7.22](https://github.com/laurent22/joplin/releases/tag/v3.7.22). Police et dépendances : licences dans LICENSE, THIRD-PARTY-NOTICES.txt et assets/.
