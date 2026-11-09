@@ -2,13 +2,13 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet de notes 0.4.0
+# Carnet de notes 0.4.1
 
 <p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 **jeremdevgit** による Windows 向けネイティブのノートアプリです。Liquid Glass に着想を得たライト／ダークテーマと８言語に対応しています。システムのクリップボードを使ったコピー・切り取り・貼り付けができ、Nextcloud、WebDAV、Joplin Cloud/Server に汎用的に接続します。個人用サーバーは設定済みではありません。ローカルデータは SQLCipher で暗号化します。**Joplin の全機能にはまだ対応していません**。詳しくは [COMPATIBILITY.md](COMPATIBILITY.md) をご覧ください。
 
-👉 **[Carnet de notes の Windows 版をダウンロード](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetDeNotes-0.4.0-Windows-x64.zip`、展開して使うアプリ）
+👉 **[Carnet de notes の Windows 版をダウンロード](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetDeNotes-0.4.1-Windows-x64.zip`、展開して使うアプリ）
 
 ![デモノートを表示したダークテーマ](screenshots/en/liquid-glass-dark.png)
 

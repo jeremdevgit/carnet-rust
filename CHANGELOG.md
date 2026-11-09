@@ -1,5 +1,11 @@
 # Changelog / Historique
 
+## 0.4.1 — 2026-11-09 (development / développement)
+
+Français : les synchronisations WebDAV et Joplin Server prennent désormais un verrou SYNC partagé, comme le client officiel, et respectent les verrous EXCLUSIVE réservés aux migrations. Sur WebDAV, la durée de vie du verrou est contrôlée avec la date de modification du serveur et un verrou perdu ou expiré arrête la synchronisation. Essais isolés avec Nextcloud 35.0.2, Joplin Server 3.7.1 et le client officiel Joplin CLI 3.7.1 dans les deux sens pour les carnets et notes Markdown sans E2EE. Le chiffrement E2EE Joplin, le partage et la parité totale restent à porter.
+
+English: WebDAV and Joplin Server now acquire shared SYNC locks and respect EXCLUSIVE migration locks. DAV lock expiry is checked using the server's file modification time; a lost or expired lock stops synchronisation. Isolated interoperability checks used Nextcloud 35.0.2, Joplin Server 3.7.1 and official Joplin CLI 3.7.1 in both directions for unencrypted Markdown notebooks and notes. Joplin E2EE, sharing and full parity remain unsupported.
+
 ## 0.4.0 — 2026-11-08 (development / développement)
 
 Français : le nom public devient **Carnet de notes**. Nouveau logo original au format vectoriel, intégré à la fenêtre et aux ressources de l’exécutable Windows, avec métadonnées éditeur `jeremdevgit`. Le nom de l’exécutable et de l’archive change ; le chemin du profil chiffré et l’identifiant du coffre système restent identiques pour retrouver les données existantes.

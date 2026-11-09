@@ -2,7 +2,7 @@
 
 Référence : Joplin Desktop **v3.7.22** (version stable du 28 octobre 2026), inventaire au 7 novembre 2026. Le périmètre vise l'application Windows et ses interactions avec les services/extensions ; aucune application mobile n'est livrée. Ce tableau ne constitue pas une déclaration de compatibilité totale.
 
-| Fonction | État 0.4.0 | Détail / travail restant |
+| Fonction | État 0.4.1 | Détail / travail restant |
 | --- | --- | --- |
 | Interface native Rust | Fonctionnel | egui/eframe + OpenGL, sans Electron |
 | Thème Liquid Glass | Fonctionnel | Clair/sombre, panneaux translucides et reflets statiques ; demande Mica Windows 11, repli dessiné ; pas de réfraction optique dynamique |
@@ -25,8 +25,8 @@ Référence : Joplin Desktop **v3.7.22** (version stable du 28 octobre 2026), in
 | Import Evernote ENEX | À porter | HTML→Markdown, ressources et métadonnées |
 | Import OneNote / Obsidian / HTML | À porter | Compatibilité des convertisseurs et ressources |
 | Export HTML / PDF / RAW | À porter | Mise en page, impression et ressources |
-| Synchronisation | Expérimental | Client format 3 Nextcloud/WebDAV et Joplin Server/Cloud, connexion générique ; essais sur Nextcloud 35.0.2 et Server 3.7.1 + PostgreSQL. Automatique à l’ouverture/puis toutes les 5 min tant que le coffre reste ouvert. Compte Cloud réel, MFA/SSO non vérifiés ; autres cibles à porter. Instantanés complets limités à 10 000 objets/256 Mio |
-| Conflits de synchronisation | Partiel | Détection locale/distante, arrêt et choix de la version locale ou serveur ; verrou exclusif serveur, protection contre effacement massif ; fusion et aperçu détaillé des versions à ajouter |
+| Synchronisation | Expérimental | Client format 3 Nextcloud/WebDAV et Joplin Server/Cloud, connexion générique ; essais sur Nextcloud 35.0.2 et Server 3.7.1 + PostgreSQL. Le client officiel Joplin CLI 3.7.1 et Carnet de notes ont échangé des carnets et notes Markdown non E2EE dans les deux sens sur Nextcloud isolé. Automatique à l’ouverture/puis toutes les 5 min tant que le coffre reste ouvert. Compte Cloud réel, MFA/SSO non vérifiés ; autres cibles à porter. Instantanés complets limités à 10 000 objets/256 Mio |
+| Conflits de synchronisation | Partiel | Détection locale/distante, arrêt et choix de la version locale ou serveur ; verrous SYNC partagés et respect du verrou EXCLUSIVE de migration, ETag DAV et protection contre effacement massif ; fusion et aperçu détaillé des versions à ajouter |
 | Chiffrement E2EE Joplin | À porter | Protocoles/algorithmes existants, clés multiples, migration, partage, tests connus ; aucune crypto maison |
 | Chiffrement au repos | Fonctionnel | SQLCipher obligatoire ; clé système aléatoire par défaut, mot de passe maître optionnel, conversion entre modes, sauvegardes portables avec mot de passe d’export ; limites de session système précisées dans SECURITY.md |
 | Plugins Joplin et API | À porter | API JS, sandbox, permissions et compatibilité à concevoir ; contrainte de coût mémoire à mesurer |
@@ -37,9 +37,9 @@ Référence : Joplin Desktop **v3.7.22** (version stable du 28 octobre 2026), in
 | OCR, dessin, tableau blanc, transcription | À porter | Moteurs, formats, accessibilité et ressources |
 | IA, recherche sémantique, MCP | À inventorier/porter | Fournisseurs facultatifs, consentement, coûts et confidentialité à définir |
 | Accessibilité | Partiel | AccessKit actif, libellés vérifiés dans les tests ; navigation clavier et lecteur d'écran Windows à vérifier |
-| Icône, barre système, raccourcis configurables | À porter | Icône propre, zone de notification, palette et personnalisation |
+| Icône, barre système, raccourcis configurables | Partiel | Logo propre dans l’application et l’exécutable ; zone de notification, palette et personnalisation à porter |
 | Installateur / mises à jour | À porter | ZIP portable compilé ; MSI/EXE signé, mises à jour et désinstallation à ajouter |
-| Compatibilité Windows réelle | À vérifier | Compilation croisée x86_64 GNU ; tests UI hors écran et moteur sur hôte/container, pas encore d'essai natif Windows |
+| Compatibilité Windows réelle | À vérifier | Compilation et tests CI natifs x86_64 MSVC réussis ; tests UI hors écran et moteur sur hôte/container, pas encore d'essai manuel sur PC Windows |
 | Optimisation mémoire/CPU | À mesurer | Rendu à la demande et listes paginées ; pas de comparaison chiffrée avec Joplin à ce stade |
 
 ## Étapes de validation du portage complet
@@ -50,4 +50,4 @@ Référence : Joplin Desktop **v3.7.22** (version stable du 28 octobre 2026), in
 4. Porter les éditeurs, convertisseurs et intégrations restantes ; décider du moteur compatible plugins et en mesurer le coût.
 5. Audit externe, tests de défaillance/charge/accessibilité Windows, installateur signé et publication explicitement autorisée.
 
-Aucun identifiant de service ni secret d'un projet existant n'est requis pour ce noyau hors ligne. Aucune publication GitHub n'a été effectuée.
+Aucun identifiant de service ni secret d'un projet existant n'est requis pour ce noyau hors ligne. Les versions de développement sont publiées sur GitHub avec leur périmètre et leurs limites.

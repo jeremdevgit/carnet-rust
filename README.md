@@ -2,13 +2,13 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet de notes 0.4.0
+# Carnet de notes 0.4.1
 
 <p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 Native Windows notebooks by **jeremdevgit**, with a Liquid Glass inspired light/dark interface and eight languages. System text clipboard support is enabled. Generic account connections support Nextcloud, WebDAV and Joplin Cloud/Server. Local data remains SQLCipher encrypted. **Full Joplin parity is not complete**; see [COMPATIBILITY.md](COMPATIBILITY.md).
 
-👉 **[Download Carnet de notes for Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.0-Windows-x64.zip`, portable application)
+👉 **[Download Carnet de notes for Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.1-Windows-x64.zip`, portable application)
 
 ![Carnet de notes dark theme with demonstration notes](screenshots/en/liquid-glass-dark.png)
 
@@ -53,7 +53,7 @@ Settings → Change passphrase can switch between verified master-password prote
 
 Credentials/sessions stay encrypted locally. New accounts default to sync after opening and every five minutes **while unlocked**. Offline notes stay editable and a later interval retries when the network/VPN is available. Editing account fields does not apply them until Save or Connect and sync. The worker temporarily suspends editing during sync and is cancellable. HTTP is loopback-only, redirects are refused and TLS verification stays enabled.
 
-Isolated integration scenarios cover Nextcloud 35.0.2 WebDAV and Joplin Server 3.7.1/PostgreSQL 17, two encrypted profiles, notebook/note/task/tag/attachment round trips, conflicts, trash/deletion and E2EE refusal. DAV ETag conditions reject concurrent overwrites/deletions. Compatibility remains experimental.
+Isolated integration scenarios cover Nextcloud 35.0.2 WebDAV and Joplin Server 3.7.1/PostgreSQL 17, two encrypted profiles, notebook/note/task/tag/attachment round trips, conflicts, trash/deletion and E2EE refusal. Shared SYNC locks coexist with Joplin clients; EXCLUSIVE migration locks block sync. DAV ETag conditions reject concurrent overwrites/deletions. Official Joplin CLI 3.7.1 exchanged unencrypted Markdown notebooks and notes with Carnet de notes in both directions on isolated Nextcloud. Compatibility remains experimental.
 
 **Local SQLCipher is separate from Joplin E2EE. E2EE targets, shared notebooks and HTML notes remain unsupported and are refused without disabling encryption.** The server can read synced content on an E2EE-disabled target. Format 3 is required; complete snapshots are capped at 10,000 records/256 MiB and two minutes per attempt. Incoming changes get encrypted recovery copies. Conflicts require an explicit choice. Disappearing metadata or a batch deleting at least 90% of local records triggers a fail-safe stop.
 

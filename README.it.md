@@ -2,13 +2,13 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet de notes 0.4.0
+# Carnet de notes 0.4.1
 
 <p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 Applicazione nativa per appunti Windows di **jeremdevgit**, con interfaccia chiara e scura ispirata a Liquid Glass e otto lingue. Copia, taglia e incolla usano gli appunti del sistema. La connessione è generica per Nextcloud, WebDAV e Joplin Cloud/Server, senza server privati preimpostati. I dati locali sono cifrati con SQLCipher. **La piena parità con Joplin non è ancora disponibile**: consulta [COMPATIBILITY.md](COMPATIBILITY.md).
 
-👉 **[Scarica Carnet de notes per Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.0-Windows-x64.zip`, applicazione portatile)
+👉 **[Scarica Carnet de notes per Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.1-Windows-x64.zip`, applicazione portatile)
 
 ![Tema scuro con note dimostrative](screenshots/en/liquid-glass-dark.png)
 

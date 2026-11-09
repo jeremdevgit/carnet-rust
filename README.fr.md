@@ -2,13 +2,13 @@
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet de notes 0.4.0
+# Carnet de notes 0.4.1
 
 <p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 Application native de notes Windows, par **jeremdevgit**, avec un thème inspiré de **Liquid Glass**, en huit langues. Copier/couper/coller du texte utilise maintenant le presse-papiers système. Connexion générique Nextcloud, WebDAV ou Joplin Cloud/Server, sans serveur personnel prédéfini. Le stockage local reste chiffré avec SQLCipher. **La parité complète avec Joplin n'est pas encore atteinte** : [suivi détaillé](COMPATIBILITY.md).
 
-👉 **[Télécharger Carnet de notes pour Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.0-Windows-x64.zip`, application portable)
+👉 **[Télécharger Carnet de notes pour Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.1-Windows-x64.zip`, application portable)
 
 ![Thème sombre de Carnet de notes avec des notes de démonstration](screenshots/en/liquid-glass-dark.png)
 
@@ -61,7 +61,7 @@ Sous Windows, le profil propre à l'application se trouve dans `%LOCALAPPDATA%\j
 
 Les identifiants et sessions restent dans le coffre local chiffré. La synchronisation automatique, activée pour les nouveaux comptes, démarre après ouverture puis réessaie toutes les cinq minutes **tant que le coffre reste ouvert**. Sans réseau/VPN, les notes locales restent consultables et modifiables ; un nouvel essai aura lieu au prochain intervalle. Les identifiants modifiés dans la fenêtre ne sont appliqués qu’après **Enregistrer** ou **Se connecter et synchroniser**. Le traitement réseau utilise un travailleur séparé, suspend l’édition pendant l’échange et peut être annulé. HTTP est réservé à la boucle locale pour les tests ; redirections refusées et certificats TLS vérifiés.
 
-Tests isolés : **Nextcloud 35.0.2** en WebDAV et **Joplin Server 3.7.1/PostgreSQL 17**, deux profils chiffrés, notes/carnets/tâches/tags/pièces jointes, conflits, suppressions et refus E2EE. Les écritures/suppressions WebDAV utilisent les ETag pour refuser l’écrasement d’un fichier changé entre-temps. La compatibilité générale avec toutes les versions et options de serveur reste expérimentale.
+Tests isolés : **Nextcloud 35.0.2** en WebDAV et **Joplin Server 3.7.1/PostgreSQL 17**, deux profils chiffrés, notes/carnets/tâches/tags/pièces jointes, conflits, suppressions et refus E2EE. Les verrous SYNC coexistent avec ceux de Joplin ; un verrou EXCLUSIVE de migration bloque la synchronisation. Les écritures/suppressions WebDAV utilisent les ETag pour refuser l’écrasement d’un fichier changé entre-temps. Le client officiel Joplin CLI 3.7.1 et Carnet de notes ont échangé des carnets et notes Markdown sans E2EE dans les deux sens sur Nextcloud isolé. La compatibilité générale avec toutes les versions et options de serveur reste expérimentale.
 
 Les changements concurrents produisent des conflits à résoudre dans l'interface avant de poursuivre. Une copie de récupération chiffrée est créée avant l'application des changements entrants. Un garde-fou arrête une cible déjà utilisée devenue vide ou un lot qui supprimerait au moins 90 % des enregistrements locaux.
 
@@ -71,7 +71,7 @@ Les changements concurrents produisent des conflits à résoudre dans l'interfac
 
 Voir [VALIDATION.md](VALIDATION.md) et [SECURITY.md](SECURITY.md). Le binaire Windows a été compilé, mais n'a pas été exécuté sur un Windows réel ici. Il n'y a pas encore de mesure comparable de RAM/CPU contre Joplin, de certification de sécurité ni de garantie d'invulnérabilité.
 
-Restent notamment : E2EE Joplin, extensions, Web Clipper, éditeur riche, OCR, dessin, imports ENEX/OneNote, exports HTML/PDF et notifications. La version 0.4.0 est une étape fonctionnelle ; elle ne doit pas être présentée comme une réécriture complète achevée.
+Restent notamment : E2EE Joplin, extensions, Web Clipper, éditeur riche, OCR, dessin, imports ENEX/OneNote, exports HTML/PDF et notifications. La version 0.4.1 est une étape fonctionnelle ; elle ne doit pas être présentée comme une réécriture complète achevée.
 
 ## Compiler
 

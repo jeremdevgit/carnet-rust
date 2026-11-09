@@ -574,7 +574,7 @@ impl Api {
         if let Some(dav) = &mut self.dav {
             return dav.lock();
         }
-        let body = serde_json::to_vec(&json!({"type":2,"clientType":1,"clientId":self.client_id}))
+        let body = serde_json::to_vec(&json!({"type":1,"clientType":1,"clientId":self.client_id}))
             .map_err(|_| Error::Invalid("lock request"))?;
         self.request("POST", "api/locks", Some(&body), false)?;
         self.renewed = Instant::now();
@@ -694,7 +694,7 @@ pub fn run(store: &mut Store, config: &Config, cancel: Arc<AtomicBool>) -> Resul
         } else {
             let _ = api.request(
                 "DELETE",
-                &format!("api/locks/2_1_{}", api.client_id),
+                &format!("api/locks/1_1_{}", api.client_id),
                 None,
                 true,
             );
@@ -1250,6 +1250,45 @@ mod tests {
             "demonstration-only".into(),
         );
     }
+    #[test]
+    #[ignore = "requires isolated Nextcloud at CARNET_TEST_NEXTCLOUD; never use a real account"]
+    fn nextcloud_account_url_roundtrip() {
+        let server =
+            std::env::var("CARNET_TEST_NEXTCLOUD").expect("isolated demo Nextcloud server URL");
+        assert!(server.starts_with("http://127.0.0.1:"));
+        roundtrip_scenario(
+            server,
+            Target::Nextcloud,
+            "demo".into(),
+            "demonstration-only".into(),
+        );
+    }
+    #[test]
+    #[ignore = "requires isolated WebDAV at CARNET_TEST_DAV; intended for native Joplin client interop"]
+    fn native_joplin_reads_carnet_upload() {
+        let server = std::env::var("CARNET_TEST_DAV").expect("isolated demo DAV URL");
+        assert!(server.starts_with("http://127.0.0.1:"));
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(dir.path(), "Demonstration vault passphrase").unwrap();
+        let book = store.create_notebook("CarnetWriteInterop", None).unwrap();
+        let mut note = store
+            .create_note(&book, "CarnetWrittenNote", false)
+            .unwrap();
+        note.body = "RustToJoplinBody".into();
+        store.save(&mut note, "interop").unwrap();
+        let config = Config {
+            target: Target::WebDav,
+            automatic: false,
+            server,
+            email: "demo".into(),
+            password: "demonstration-only".into(),
+            client_id: id(),
+        };
+        assert!(matches!(
+            run(&mut store, &config, Arc::new(AtomicBool::new(false))).unwrap(),
+            Outcome::Complete { .. }
+        ));
+    }
     fn roundtrip_scenario(server: String, target: Target, email: String, password: String) {
         let dir = tempfile::tempdir().unwrap();
         let mut a = Store::open(&dir.path().join("a"), "Demonstration vault passphrase").unwrap();
@@ -1276,7 +1315,70 @@ mod tests {
             run(&mut a, &config, cancel.clone()).unwrap(),
             Outcome::Complete { .. }
         ));
+        if std::env::var_os("CARNET_TEST_NATIVE_JOPLIN_SEED").is_some() {
+            assert!(
+                a.notebooks()
+                    .unwrap()
+                    .iter()
+                    .any(|book| book.title == "NativeJoplinInterop")
+            );
+            assert!(a.all_notes().unwrap().iter().any(|note| {
+                note.title == "NativeJoplinNote" && note.body == "NativeBodyInterop"
+            }));
+        }
         config.client_id = id();
+        if target != Target::JoplinServer {
+            let mut api = Api::new(&a, &config, cancel.clone()).unwrap();
+            let other_sync = format!("locks/1_1_{}.json", id());
+            api.put(&other_sync, b"{\"type\":1,\"clientType\":1}")
+                .unwrap();
+            // An ordinary Joplin sync lock must not block another client.
+            assert!(matches!(
+                run(&mut b, &config, cancel.clone()).unwrap(),
+                Outcome::Complete { .. }
+            ));
+            api.get(&other_sync).unwrap();
+            api.delete(&other_sync).unwrap();
+            let exclusive = format!("locks/2_1_{}.json", id());
+            api.put(&exclusive, b"{\"type\":2,\"clientType\":1}")
+                .unwrap();
+            let blocked = run(&mut b, &config, cancel.clone()).unwrap_err();
+            assert!(matches!(
+                blocked,
+                Error::Invalid("another Joplin client holds an exclusive lock; retry later")
+            ));
+            api.get(&exclusive).unwrap();
+            api.delete(&exclusive).unwrap();
+        } else {
+            let api = Api::new(&a, &config, cancel.clone()).unwrap();
+            let foreign_id = id();
+            let lock = serde_json::to_vec(&json!({"type":1,"clientType":1,"clientId":foreign_id}))
+                .unwrap();
+            api.request("POST", "api/locks", Some(&lock), false)
+                .unwrap();
+            // Joplin Server also permits simultaneous ordinary sync locks.
+            assert!(matches!(
+                run(&mut b, &config, cancel.clone()).unwrap(),
+                Outcome::Complete { .. }
+            ));
+            api.request("DELETE", &format!("api/locks/1_1_{foreign_id}"), None, true)
+                .unwrap();
+            let exclusive_id = id();
+            let exclusive =
+                serde_json::to_vec(&json!({"type":2,"clientType":1,"clientId":exclusive_id}))
+                    .unwrap();
+            api.request("POST", "api/locks", Some(&exclusive), false)
+                .unwrap();
+            let blocked = run(&mut b, &config, cancel.clone()).unwrap_err();
+            assert!(matches!(blocked, Error::SyncStatus(409 | 423)));
+            api.request(
+                "DELETE",
+                &format!("api/locks/2_1_{exclusive_id}"),
+                None,
+                true,
+            )
+            .unwrap();
+        }
         assert!(matches!(
             run(&mut b, &config, cancel.clone()).unwrap(),
             Outcome::Complete { .. }
@@ -1349,6 +1451,14 @@ mod tests {
         {
             api.get(&path).unwrap();
             api.delete(&path).unwrap();
+        }
+        if let Some(dav) = &api.dav {
+            for name in dav.list(".resource").unwrap() {
+                assert!(valid_id(&name));
+                let path = format!(".resource/{name}");
+                api.get(&path).unwrap();
+                api.delete(&path).unwrap();
+            }
         }
         api.get("info.json").unwrap();
         api.delete("info.json").unwrap();

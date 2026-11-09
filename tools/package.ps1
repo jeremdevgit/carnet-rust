@@ -3,7 +3,7 @@ Push-Location (Join-Path $PSScriptRoot '..')
 try {
     cargo build --locked --release
     if ($LASTEXITCODE -ne 0) { throw 'Compilation failed.' }
-    $version = '0.4.0'
+    $version = '0.4.1'
     $stage = Join-Path 'dist' "CarnetDeNotes-$version-Windows-x64"
     if (Test-Path $stage) { throw 'Choose a clean output directory; existing packages are protected.' }
     New-Item -ItemType Directory -Path $stage | Out-Null

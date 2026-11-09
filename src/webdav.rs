@@ -199,36 +199,62 @@ impl Dav {
         }
     }
     fn lock_path(&self) -> String {
-        format!("locks/2_1_{}.json", self.client_id)
+        // Joplin's lock type 1 is a shared sync lock; type 2 is reserved for
+        // exclusive sync-target migrations.
+        format!("locks/1_1_{}.json", self.client_id)
+    }
+    fn lock_age_ms(response: &Response) -> Result<i64> {
+        let modified = response
+            .headers()
+            .get(reqwest::header::LAST_MODIFIED)
+            .and_then(|v| v.to_str().ok())
+            .ok_or(Error::Invalid("WebDAV lock has no Last-Modified header"))?;
+        let modified = chrono::DateTime::parse_from_rfc2822(modified)
+            .map_err(|_| Error::Invalid("WebDAV lock modification time"))?
+            .timestamp_millis();
+        let current = response
+            .headers()
+            .get(reqwest::header::DATE)
+            .and_then(|v| v.to_str().ok())
+            .and_then(|v| chrono::DateTime::parse_from_rfc2822(v).ok())
+            .map_or_else(now, |v| v.timestamp_millis());
+        Ok(current.saturating_sub(modified))
     }
     fn check_other_locks(&self) -> Result<()> {
         for name in self.list("locks")? {
-            if !name.ends_with(".json") || !(name.starts_with("1_") || name.starts_with("2_")) {
-                continue;
-            }
-            if name == format!("2_1_{}.json", self.client_id) {
+            // Multiple SYNC locks may coexist. Only an active EXCLUSIVE lock
+            // prevents a sync, as in Joplin's lock protocol.
+            if !name.ends_with(".json") || !name.starts_with("2_") {
                 continue;
             }
             let response = self.send("GET", &format!("locks/{name}"), None, false)?;
             if response.status().as_u16() == 404 {
                 continue;
             }
-            let data = Self::read(response)?;
-            let value: serde_json::Value = serde_json::from_slice(&data)
-                .map_err(|_| Error::Invalid("malformed WebDAV lock"))?;
-            let updated = value["updatedTime"]
-                .as_i64()
-                .ok_or(Error::Invalid("WebDAV lock timestamp"))?;
-            if now().saturating_sub(updated) < 180_000 {
+            let age = Self::lock_age_ms(&response)?;
+            Self::read(response)?;
+            if age < 180_000 {
                 return Err(Error::Invalid(
-                    "another Joplin client holds a synchronisation lock; retry later",
+                    "another Joplin client holds an exclusive lock; retry later",
                 ));
             }
         }
         Ok(())
     }
+    fn check_own_lock(&self) -> Result<()> {
+        let response = self.send("GET", &self.lock_path(), None, false)?;
+        if response.status().as_u16() == 404 {
+            return Err(Error::Invalid("WebDAV sync lock was lost; retry"));
+        }
+        let age = Self::lock_age_ms(&response)?;
+        Self::read(response)?;
+        if age >= 180_000 {
+            return Err(Error::Invalid("WebDAV sync lock expired; retry"));
+        }
+        Ok(())
+    }
     fn write_lock(&self) -> Result<()> {
-        let data=serde_json::to_vec(&serde_json::json!({"type":2,"clientType":1,"clientId":self.client_id,"updatedTime":now()})).map_err(|_|Error::Invalid("lock"))?;
+        let data=serde_json::to_vec(&serde_json::json!({"type":1,"clientType":1,"clientId":self.client_id,"updatedTime":now()})).map_err(|_|Error::Invalid("lock"))?;
         Self::read(self.send("PUT", &self.lock_path(), Some(&data), false)?)?;
         Ok(())
     }
@@ -247,12 +273,17 @@ impl Dav {
             let _ = self.release();
             return Err(e);
         }
+        if let Err(e) = self.check_own_lock() {
+            let _ = self.release();
+            return Err(e);
+        }
         self.renewed = Instant::now();
         Ok(())
     }
     pub(crate) fn tick(&mut self) -> Result<()> {
         if self.held && self.renewed.elapsed() > Duration::from_secs(30) {
             self.check_other_locks()?;
+            self.check_own_lock()?;
             self.write_lock()?;
             self.renewed = Instant::now();
         }

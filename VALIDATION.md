@@ -1,6 +1,6 @@
-# Vérification — 8 novembre 2026
+# Vérification — 9 novembre 2026
 
-Version : **0.4.0**, développement. La parité Joplin n’est pas atteinte ; voir COMPATIBILITY.md.
+Version : **0.4.1**, développement. La parité Joplin n’est pas atteinte ; voir COMPATIBILITY.md.
 
 | Contrôle | Résultat | Limite |
 | --- | --- | --- |
@@ -8,8 +8,9 @@ Version : **0.4.0**, développement. La parité Joplin n’est pas atteinte ; vo
 | Chiffrement | Mode système avec backend de test, clé manquante sans remplacement de données, transitions maître/système/maître, sauvegarde portable restaurée sur un autre profil ; mauvaise phrase, corruption authentifiée, contenu/WAL, migration atomique, schéma malformé, changement de clé, sauvegarde/restauration, identifiants de synchronisation chiffrés | Tests ciblés ; pas d’audit externe |
 | Intégrité | Notes, tâches, tags, sous-carnets, cycles, historique, corbeille/purge, ressources orphelines, brouillons, versions optimistes, import JEX transactionnel et entrées hostiles | JEX : archives construites ; fidélité complète avec Joplin Desktop non certifiée |
 | Interface | Copier/couper/coller Unicode et annuler simulés ; connexion générique, conservation des brouillons, verrouillage et première entrée après inactivité, 8 langues, absence de glyphes manquants, images locales bornées, blocage des images distantes ; décodage du nouveau logo | Accessibilité et comportement réels sous Windows à vérifier |
-| Nextcloud WebDAV | **1 test supplémentaire réussi**, Nextcloud 35.0.2 isolé, deux profils SQLCipher, aller-retour/conflits/purge/refus E2EE et rejet d’écrasement concurrent par ETag HTTP 412 | Aucun carnet réel utilisé ; autres versions/options de déploiement à tester |
-| Joplin Server | **1 test d’intégration supplémentaire réussi**, Server 3.7.1 et PostgreSQL 17.11, deux profils SQLCipher | Serveur et comptes de démonstration isolés, aucun compte Cloud réel |
+| Nextcloud WebDAV | **3 tests d’intégration supplémentaires réussis**, Nextcloud 35.0.2 isolé : URL WebDAV complète, URL simple de compte et écriture pour le client Joplin officiel ; deux profils SQLCipher, aller-retour/conflits/purge/refus E2EE, verrou SYNC partagé, verrou EXCLUSIVE bloquant, rejet d’écrasement concurrent par ETag HTTP 412 | Aucun carnet réel utilisé ; autres versions/options de déploiement à tester |
+| Joplin Server | **1 test d’intégration supplémentaire réussi**, Server 3.7.1 et PostgreSQL 17, deux profils SQLCipher, coexistence des verrous SYNC et blocage EXCLUSIVE | Serveur et comptes de démonstration isolés, aucun compte Cloud réel |
+| Client Joplin officiel | Joplin CLI 3.7.1 a envoyé un carnet et une note Markdown que Carnet de notes a importés avec le contenu exact ; Joplin CLI a ensuite lu un carnet et une note créés par Carnet de notes sur une autre cible Nextcloud isolée | Scénario manuel de compatibilité sans E2EE ; ressources, partage et Cloud réel non validés entre clients |
 | Scénario serveur | Aller-retour notes/carnets/tâches/tags/pièces jointes, conflit et choix, corbeille/suppression, refus E2EE et protection contre cible effacée | Synchronisation expérimentale, instantanés bornés ; partage et E2EE non pris en charge |
 | Rendu | **2 tests supplémentaires réussis**, Linux ARM64 Vulkan/lavapipe ; 5 captures régénérées et inspectées : clair/sombre FR/EN et création du coffre avec le nouveau nom et logo | Données fictives ; Mica réel non vérifié |
 | Analyse | Clippy tous targets avec `-D warnings` et formatage réussis | Ne prouve pas l’absence de failles |
@@ -18,7 +19,7 @@ Version : **0.4.0**, développement. La parité Joplin n’est pas atteinte ; vo
 | Confidentialité | Aucun carnet personnel ni profil réel inclus ; contrôles ciblés de chemins privés et formats courants de secrets | Ne constitue pas une garantie absolue |
 | Publication | Dépôt public `jeremdevgit/carnet-rust` ; workflows Windows et RustSec ; CodeQL étendu, Dependabot, analyse IA des PR, protection de `main` et signalement privé activés | Aucun scan IA complet facturable lancé ; une coche verte n'est pas une certification de sécurité |
 
-Total : **57 tests réussis** sur les quatre exécutions (53 ordinaires + 1 Nextcloud + 1 Joplin Server + 2 rendu). Les quatre tests dépendant d’un serveur ou GPU restent volontairement ignorés dans la commande ordinaire.
+Total : **59 tests réussis** sur les exécutions ciblées (53 ordinaires + 3 Nextcloud/WebDAV + 1 Joplin Server + 2 rendu), auxquels s’ajoute la vérification manuelle dans Joplin CLI. Les six tests dépendant d’un serveur ou GPU restent volontairement ignorés dans la commande ordinaire.
 
 ## Dépendances
 
