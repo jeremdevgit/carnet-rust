@@ -1198,7 +1198,7 @@ mod tests {
     #[test]
     fn sync_credentials_are_only_written_inside_sqlcipher() {
         let dir = tempfile::tempdir().unwrap();
-        let store = Store::open(dir.path(), "Demonstration vault phrase").unwrap();
+        let store = Store::open(dir.path(), &id()).unwrap();
         let config = Config {
             target: Target::JoplinServer,
             automatic: false,
@@ -1235,7 +1235,7 @@ mod tests {
             server,
             Target::JoplinServer,
             "admin@localhost".into(),
-            "admin".into(),
+            std::env::var("CARNET_TEST_SERVER_PASSWORD").expect("isolated Joplin Server password"),
         );
     }
     #[test]
@@ -1247,7 +1247,7 @@ mod tests {
             server,
             Target::WebDav,
             "demo".into(),
-            "demonstration-only".into(),
+            std::env::var("CARNET_TEST_DAV_PASSWORD").expect("isolated WebDAV password"),
         );
     }
     #[test]
@@ -1260,7 +1260,7 @@ mod tests {
             server,
             Target::Nextcloud,
             "demo".into(),
-            "demonstration-only".into(),
+            std::env::var("CARNET_TEST_DAV_PASSWORD").expect("isolated Nextcloud password"),
         );
     }
     #[test]
@@ -1269,7 +1269,7 @@ mod tests {
         let server = std::env::var("CARNET_TEST_DAV").expect("isolated demo DAV URL");
         assert!(server.starts_with("http://127.0.0.1:"));
         let dir = tempfile::tempdir().unwrap();
-        let mut store = Store::open(dir.path(), "Demonstration vault passphrase").unwrap();
+        let mut store = Store::open(dir.path(), &id()).unwrap();
         let book = store.create_notebook("CarnetWriteInterop", None).unwrap();
         let mut note = store
             .create_note(&book, "CarnetWrittenNote", false)
@@ -1281,7 +1281,7 @@ mod tests {
             automatic: false,
             server,
             email: "demo".into(),
-            password: "demonstration-only".into(),
+            password: std::env::var("CARNET_TEST_DAV_PASSWORD").expect("isolated WebDAV password"),
             client_id: id(),
         };
         assert!(matches!(
@@ -1291,8 +1291,9 @@ mod tests {
     }
     fn roundtrip_scenario(server: String, target: Target, email: String, password: String) {
         let dir = tempfile::tempdir().unwrap();
-        let mut a = Store::open(&dir.path().join("a"), "Demonstration vault passphrase").unwrap();
-        let mut b = Store::open(&dir.path().join("b"), "Demonstration vault passphrase").unwrap();
+        let vault_secret = id();
+        let mut a = Store::open(&dir.path().join("a"), &vault_secret).unwrap();
+        let mut b = Store::open(&dir.path().join("b"), &vault_secret).unwrap();
         let mut config = Config {
             target,
             automatic: false,
