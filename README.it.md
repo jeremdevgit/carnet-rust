@@ -9,7 +9,7 @@
 
 Applicazione nativa per appunti Windows di **jeremdevgit**, con interfaccia chiara e scura ispirata a Liquid Glass e otto lingue. Copia, taglia e incolla usano gli appunti del sistema. La connessione è generica per Nextcloud, WebDAV e Joplin Cloud/Server, senza server privati preimpostati. I dati locali sono cifrati con SQLCipher. **La piena parità con Joplin non è ancora disponibile**: consulta [COMPATIBILITY.md](COMPATIBILITY.md).
 
-👉 **[Scarica Carnet de notes per Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.1-Windows-x64.zip`, applicazione portatile)
+👉 **[Scarica Carnet de notes per Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.5.0-Windows-x64-Setup.exe`, programma di installazione)
 
 ![Tema scuro con note dimostrative](screenshots/en/liquid-glass-dark.png)
 
@@ -19,7 +19,7 @@ Applicazione nativa per appunti Windows di **jeremdevgit**, con interfaccia chia
 
 ## Avvio e protezione locale
 
-Estrai lo ZIP per Windows e avvia `CarnetDeNotes.exe`. L'uso locale non richiede un account né privilegi di amministratore. L'eseguibile non è firmato e richiede un driver OpenGL funzionante. Su Windows 11 viene richiesto Mica; altrimenti restano disponibili sfumature e pannelli traslucidi.
+Esegui il programma di installazione (per utente, senza privilegi di amministratore) e apri **Carnet de notes** dal menu Start; la disinstallazione conserva i taccuini cifrati. L'uso locale non richiede un account né privilegi di amministratore. L'eseguibile non è firmato e richiede un driver OpenGL funzionante. Su Windows 11 viene richiesto Mica; altrimenti restano disponibili sfumature e pannelli traslucidi.
 
 I profili 0.3 restano nella stessa cartella cifrata e mantengono la stessa voce in Gestione credenziali di Windows. Il nuovo eseguibile li apre senza copiare o convertire il profilo.
 
@@ -39,10 +39,10 @@ Sono disponibili taccuini e sottotaccuini, note Markdown con anteprima, attivit�
 
 Per i nuovi account la sincronizzazione automatica parte dopo l'apertura e riprova ogni cinque minuti finché il contenitore è sbloccato. Le note locali restano modificabili senza rete o VPN. Le credenziali rimangono nel contenitore cifrato. Test isolati con Nextcloud 35.0.2 e Joplin Server 3.7.1 hanno avuto esito positivo; la compatibilità generale resta sperimentale.
 
-**La cifratura locale SQLCipher non equivale alla cifratura end-to-end (E2EE) di Joplin. Destinazioni E2EE, taccuini condivisi e note HTML vengono rifiutati senza disattivare la cifratura esistente.** Senza E2EE il server può leggere i contenuti sincronizzati.
+**La crittografia end-to-end (E2EE) di Joplin è supportata**: inserisci la password principale nelle impostazioni di sincronizzazione; verificata in entrambe le direzioni con il client ufficiale Joplin CLI 3.7.1. La cifratura di una destinazione esistente non viene mai disattivata. Le note HTML sono conservate e mostrate come testo. La condivisione dei taccuini non è ancora disponibile. Senza E2EE il server può leggere i contenuti sincronizzati.
 
 ## Stato e codice sorgente
 
-L'eseguibile Windows è stato compilato, ma non eseguito su un vero PC Windows. Non sono disponibili un confronto attendibile di RAM/CPU con Joplin né una certificazione di sicurezza. Mancano ancora E2EE, estensioni, Web Clipper, editor avanzato, OCR e altre funzioni. Consulta [VALIDATION.md](VALIDATION.md) e [SECURITY.md](SECURITY.md).
+L'eseguibile Windows è stato compilato, ma non eseguito su un vero PC Windows. Non sono disponibili un confronto attendibile di RAM/CPU con Joplin né una certificazione di sicurezza. Mancano ancora condivisione dei taccuini, estensioni, Web Clipper, editor avanzato, OCR e altre funzioni. Consulta [VALIDATION.md](VALIDATION.md) e [SECURITY.md](SECURITY.md).
 
 Per compilare: Rust 1.95+, strumenti C++ Microsoft e Perl; `cargo test --locked`, `cargo clippy --locked --all-targets -- -D warnings`, `cargo build --locked --release`. Codice originale GPL-3.0-or-later. Progetto indipendente, non affiliato a Joplin. Licenze delle dipendenze in [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt). Autore pubblico: [jeremdevgit](https://github.com/jeremdevgit).

@@ -9,7 +9,7 @@
 
 Application native de notes Windows, par **jeremdevgit**, avec un thème inspiré de **Liquid Glass**, en huit langues. Copier/couper/coller du texte utilise maintenant le presse-papiers système. Connexion générique Nextcloud, WebDAV ou Joplin Cloud/Server, sans serveur personnel prédéfini. Le stockage local reste chiffré avec SQLCipher. **La parité complète avec Joplin n'est pas encore atteinte** : [suivi détaillé](COMPATIBILITY.md).
 
-👉 **[Télécharger Carnet de notes pour Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.1-Windows-x64.zip`, application portable)
+👉 **[Télécharger Carnet de notes pour Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.5.0-Windows-x64-Setup.exe`, installateur)
 
 ![Thème sombre de Carnet de notes avec des notes de démonstration](screenshots/en/liquid-glass-dark.png)
 
@@ -19,7 +19,7 @@ Application native de notes Windows, par **jeremdevgit**, avec un thème inspir�
 
 ## Démarrer
 
-Extraire le ZIP Windows, puis ouvrir `CarnetDeNotes.exe`. Aucun compte ni droit administrateur requis pour les fonctions locales. L'exécutable n'est pas signé et nécessite un pilote OpenGL opérationnel. Windows 11 peut fournir le fond Mica ; sinon les dégradés et panneaux translucides restent disponibles.
+Lancer l'installateur (par utilisateur, sans droits administrateur), puis ouvrir **Carnet de notes** depuis le menu Démarrer. La désinstallation conserve vos carnets chiffrés. Aucun compte requis pour les fonctions locales. L'exécutable n'est pas signé et nécessite un pilote OpenGL opérationnel. Windows 11 peut fournir le fond Mica ; sinon les dégradés et panneaux translucides restent disponibles.
 
 Les profils 0.3 restent dans le même dossier chiffré et conservent la même entrée du Gestionnaire d’identifiants Windows. Le nouvel exécutable les ouvre sans copie ni conversion du profil.
 
@@ -62,17 +62,17 @@ Sous Windows, le profil propre à l'application se trouve dans `%LOCALAPPDATA%\j
 
 Les identifiants et sessions restent dans le coffre local chiffré. La synchronisation automatique, activée pour les nouveaux comptes, démarre après ouverture puis réessaie toutes les cinq minutes **tant que le coffre reste ouvert**. Sans réseau/VPN, les notes locales restent consultables et modifiables ; un nouvel essai aura lieu au prochain intervalle. Les identifiants modifiés dans la fenêtre ne sont appliqués qu’après **Enregistrer** ou **Se connecter et synchroniser**. Le traitement réseau utilise un travailleur séparé, suspend l’édition pendant l’échange et peut être annulé. HTTP est réservé à la boucle locale pour les tests ; redirections refusées et certificats TLS vérifiés.
 
-Tests isolés : **Nextcloud 35.0.2** en WebDAV et **Joplin Server 3.7.1/PostgreSQL 17**, deux profils chiffrés, notes/carnets/tâches/tags/pièces jointes, conflits, suppressions et refus E2EE. Les verrous SYNC coexistent avec ceux de Joplin ; un verrou EXCLUSIVE de migration bloque la synchronisation. Les écritures/suppressions WebDAV utilisent les ETag pour refuser l’écrasement d’un fichier changé entre-temps. Le client officiel Joplin CLI 3.7.1 et Carnet de notes ont échangé des carnets et notes Markdown sans E2EE dans les deux sens sur Nextcloud isolé. La compatibilité générale avec toutes les versions et options de serveur reste expérimentale.
+Tests isolés : **Nextcloud 35.0.2** en WebDAV et **Joplin Server 3.7.1/PostgreSQL 17**, deux profils chiffrés, notes/carnets/tâches/tags/pièces jointes, conflits, suppressions et chiffrement de bout en bout Joplin. L'E2EE a été vérifié dans les deux sens avec le client officiel Joplin CLI 3.7.1 : notes, carnets, étiquettes et pièces jointes chiffrés par Joplin sont lus par Carnet, ceux chiffrés par Carnet sont lus par Joplin, et une cible chiffrée créée par Carnet s'ouvre dans Joplin. Les verrous SYNC coexistent avec ceux de Joplin ; un verrou EXCLUSIVE de migration bloque la synchronisation. Les écritures/suppressions WebDAV utilisent les ETag pour refuser l’écrasement d’un fichier changé entre-temps. Le client officiel Joplin CLI 3.7.1 et Carnet de notes ont échangé des carnets et notes Markdown sans E2EE dans les deux sens sur Nextcloud isolé. La compatibilité générale avec toutes les versions et options de serveur reste expérimentale.
 
 Les changements concurrents produisent des conflits à résoudre dans l'interface avant de poursuivre. Une copie de récupération chiffrée est créée avant l'application des changements entrants. Un garde-fou arrête une cible déjà utilisée devenue vide ou un lot qui supprimerait au moins 90 % des enregistrements locaux.
 
-**Le chiffrement local SQLCipher ne remplace pas l'E2EE Joplin. Les cibles E2EE et les carnets partagés ne sont pas pris en charge et sont refusés, sans désactiver leur chiffrement.** Les notes HTML/riches ne sont pas prises en charge par cette synchronisation. Les cibles doivent être au format de synchronisation 3. Le traitement complet est limité à 10 000 enregistrements et 256 Mio de contenu par profil, avec un budget de temps de deux minutes par tentative ; relancer en cas d'interruption. L'interopérabilité générale et les cas limites nécessitent encore des essais.
+**Le chiffrement de bout en bout (E2EE) de Joplin est pris en charge** : saisissez le mot de passe maître dans les réglages de synchronisation pour utiliser une cible chiffrée, ou pour en créer une nouvelle. Carnet lit les méthodes actuelles de Joplin (KeyV1, StringV1, FileV1) et les anciennes SJCL AES-CCM, et écrit avec les méthodes actuelles ; les anciennes méthodes OCB2, obsolètes, sont refusées. Le chiffrement d'une cible existante n'est jamais désactivé. Le chiffrement local SQLCipher reste distinct. Les notes HTML de Joplin sont conservées, synchronisées et affichées en aperçu texte. Les éléments des carnets partagés via Joplin Server gardent leur partage ; le partage lui-même et les carnets partagés avec E2EE (qui demandent la paire de clés du partage) ne sont pas encore pris en charge. Les cibles doivent être au format de synchronisation 3. Le traitement complet est limité à 10 000 enregistrements et 256 Mio de contenu par profil, avec un budget de temps de deux minutes par tentative ; relancer en cas d'interruption. L'interopérabilité générale et les cas limites nécessitent encore des essais.
 
 ## Vérifications et limites
 
 Voir [VALIDATION.md](VALIDATION.md) et [SECURITY.md](SECURITY.md). Le binaire Windows a été compilé, mais n'a pas été exécuté sur un Windows réel ici. Il n'y a pas encore de mesure comparable de RAM/CPU contre Joplin, de certification de sécurité ni de garantie d'invulnérabilité.
 
-Restent notamment : E2EE Joplin, extensions, Web Clipper, éditeur riche, OCR, dessin, imports ENEX/OneNote, exports HTML/PDF et notifications. La version 0.4.1 est une étape fonctionnelle ; elle ne doit pas être présentée comme une réécriture complète achevée.
+Restent notamment : partage de carnets, extensions, Web Clipper, éditeur riche, OCR, dessin, imports ENEX/OneNote, exports HTML/PDF et notifications. La version 0.5.0 est une étape fonctionnelle ; elle ne doit pas être présentée comme une réécriture complète achevée.
 
 ## Compiler
 
@@ -84,7 +84,7 @@ cargo clippy --locked --all-targets -- -D warnings
 cargo build --locked --release
 ```
 
-Le programme est dans `target/release/CarnetDeNotes.exe`. Le workflow Windows construit un artefact sans publier de Release. Le script `tools/package.ps1` prépare le ZIP portable.
+Le programme est dans `target/release/CarnetDeNotes.exe`. Le workflow Windows construit un artefact sans publier de Release. Le script `tools/package.ps1` construit l'installateur Windows avec Inno Setup 6 ; la CI l'installe puis le désinstalle pour le vérifier.
 
 ## Licence
 

@@ -93,6 +93,16 @@ impl Item {
     }
 }
 pub(crate) fn parse_item(text: &str) -> Result<Item> {
+    let item = parse_item_raw(text)?;
+    if item.number("encryption_applied")? != 0 || !item.get("encryption_cipher_text").is_empty() {
+        return Err(Error::Invalid(
+            "encrypted JEX: export a decrypted JEX from Joplin first",
+        ));
+    }
+    Ok(item)
+}
+/// Parses an item that may still carry Joplin E2EE ciphertext.
+pub(crate) fn parse_item_raw(text: &str) -> Result<Item> {
     // Joplin serialises the metadata block LAST, separated by a blank line.
     let normalized = text.replace("\r\n", "\n");
     let (front, props) = normalized
@@ -117,11 +127,6 @@ pub(crate) fn parse_item(text: &str) -> Result<Item> {
     };
     if !valid_id(item.get("id")) {
         return Err(Error::Invalid("JEX item identifier"));
-    }
-    if item.number("encryption_applied")? != 0 || !item.get("encryption_cipher_text").is_empty() {
-        return Err(Error::Invalid(
-            "encrypted JEX: export a decrypted JEX from Joplin first",
-        ));
     }
     Ok(item)
 }

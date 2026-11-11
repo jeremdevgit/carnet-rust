@@ -41,9 +41,20 @@ jobs:
       - run: cargo fmt --check
       - run: cargo test --locked
       - run: cargo clippy --locked --all-targets -- -D warnings
-      - name: Portable package
+      - name: Windows installer
         shell: pwsh
         run: ./tools/package.ps1
+      - name: Smoke test installer
+        shell: pwsh
+        run: |
+          $setup = (Get-ChildItem dist\CarnetDeNotes-*-Setup.exe | Select-Object -First 1).FullName
+          $folder = Join-Path $env:RUNNER_TEMP 'carnet-install-smoke'
+          $p = Start-Process -FilePath $setup -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', "/DIR=$folder") -PassThru -Wait
+          if ($p.ExitCode -ne 0) { throw "Installer exited with $($p.ExitCode)" }
+          if (-not (Test-Path (Join-Path $folder 'CarnetDeNotes.exe'))) { throw 'Installed executable missing' }
+          $uninstaller = (Get-ChildItem (Join-Path $folder 'unins*.exe') | Select-Object -First 1).FullName
+          $p = Start-Process -FilePath $uninstaller -ArgumentList @('/VERYSILENT', '/NORESTART') -PassThru -Wait
+          if ($p.ExitCode -ne 0) { throw "Uninstaller exited with $($p.ExitCode)" }
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: CarnetDeNotes-Windows-x64

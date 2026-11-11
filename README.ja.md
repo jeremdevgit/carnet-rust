@@ -9,7 +9,7 @@
 
 **jeremdevgit** による Windows 向けネイティブのノートアプリです。Liquid Glass に着想を得たライト／ダークテーマと８言語に対応しています。システムのクリップボードを使ったコピー・切り取り・貼り付けができ、Nextcloud、WebDAV、Joplin Cloud/Server に汎用的に接続します。個人用サーバーは設定済みではありません。ローカルデータは SQLCipher で暗号化します。**Joplin の全機能にはまだ対応していません**。詳しくは [COMPATIBILITY.md](COMPATIBILITY.md) をご覧ください。
 
-👉 **[Carnet de notes の Windows 版をダウンロード](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetDeNotes-0.4.1-Windows-x64.zip`、展開して使うアプリ）
+👉 **[Carnet de notes の Windows 版をダウンロード](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetDeNotes-0.5.0-Windows-x64-Setup.exe`、インストーラー）
 
 ![デモノートを表示したダークテーマ](screenshots/en/liquid-glass-dark.png)
 
@@ -19,7 +19,7 @@
 
 ## 導入とローカル保護
 
-Windows 用 ZIP を展開して `CarnetDeNotes.exe` を起動してください。ローカル利用にアカウントや管理者権限は不要です。実行ファイルは署名されておらず、正常に動作する OpenGL ドライバーが必要です。Windows 11 では Mica を要求し、利用できない場合もグラデーションと半透明パネルを表示します。
+インストーラーを実行し（ユーザー単位、管理者権限不要）、スタートメニューから **Carnet de notes** を開いてください。アンインストールしても暗号化されたノートブックは残ります。ローカル利用にアカウントや管理者権限は不要です。実行ファイルは署名されておらず、正常に動作する OpenGL ドライバーが必要です。Windows 11 では Mica を要求し、利用できない場合もグラデーションと半透明パネルを表示します。
 
 既存の 0.3 プロファイルは同じ暗号化データフォルダーと Windows 資格情報マネージャーの登録を引き継ぎます。新しい実行ファイルでコピーや変換をせずに開けます。
 
@@ -39,10 +39,10 @@ Windows 用 ZIP を展開して `CarnetDeNotes.exe` を起動してください�
 
 新しいアカウントでは起動後に自動同期し、保管庫が開いている間は５分ごとに再試行します。ネットワークや VPN がないときもローカルノートを編集できます。認証情報は暗号化した保管庫内に保存します。Nextcloud 35.0.2 と Joplin Server 3.7.1 の隔離環境でテストしましたが、一般的な互換性はまだ実験段階です。
 
-**ローカルの SQLCipher 暗号化は Joplin のエンドツーエンド暗号化（E2EE）ではありません。E2EE の同期先、共有ノートブック、HTML ノートは、既存の暗号化を解除せずに拒否します。** E2EE が無効な同期先ではサーバーが内容を読めます。
+**Joplin のエンドツーエンド暗号化（E2EE）に対応しました**：同期設定でマスターパスワードを入力してください。公式 Joplin CLI 3.7.1 と双方向で確認済みです。既存の同期先の暗号化は解除しません。HTML ノートは保持され、テキストでプレビューされます。ノートブックの共有はまだ未対応です。 E2EE が無効な同期先ではサーバーが内容を読めます。
 
 ## 状態とソースコード
 
-Windows 版はコンパイル済みですが、実機の Windows ではまだ動作確認していません。Joplin との信頼できるメモリ／CPU 比較やセキュリティ認証もありません。E2EE、プラグイン、Web Clipper、リッチテキスト編集、OCR などは未実装です。[VALIDATION.md](VALIDATION.md) と [SECURITY.md](SECURITY.md) を参照してください。
+Windows 版はコンパイル済みですが、実機の Windows ではまだ動作確認していません。Joplin との信頼できるメモリ／CPU 比較やセキュリティ認証もありません。ノートブックの共有、プラグイン、Web Clipper、リッチテキスト編集、OCR などは未実装です。[VALIDATION.md](VALIDATION.md) と [SECURITY.md](SECURITY.md) を参照してください。
 
 ビルドには Rust 1.95+、Microsoft C++ Build Tools、Perl が必要です：`cargo test --locked`、`cargo clippy --locked --all-targets -- -D warnings`、`cargo build --locked --release`。オリジナルコードは GPL-3.0-or-later です。Joplin と提携していない独立したプロジェクトです。依存ライブラリのライセンスは [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt) に記載しています。公開上の作者：[jeremdevgit](https://github.com/jeremdevgit)。

@@ -222,6 +222,7 @@ pub(super) fn account_form(ui: &mut egui::Ui, config: &mut sync::Config, lang: u
     if config.target != previous {
         config.server.clear();
         config.password.zeroize();
+        config.e2ee_password.zeroize();
     }
     if config.target == sync::Target::JoplinServer && ui.button("Joplin Cloud").clicked() {
         config.server = "https://api.joplincloud.com".into();
@@ -260,6 +261,17 @@ pub(super) fn account_form(ui: &mut egui::Ui, config: &mut sync::Config, lang: u
             .char_limit(4096),
     )
     .labelled_by(label.id);
+    let label = ui.label(tr(
+        "Mot de passe de chiffrement de bout en bout (facultatif)",
+        lang,
+    ));
+    ui.add(
+        egui::TextEdit::singleline(&mut config.e2ee_password)
+            .password(true)
+            .char_limit(4096),
+    )
+    .labelled_by(label.id);
+    ui.small(tr("Indiquez le mot de passe maître si la cible Joplin est chiffrée. Sur une cible vide, il active le chiffrement compatible Joplin (12 caractères minimum).", lang));
     if config.target == sync::Target::Nextcloud {
         ui.small(tr("Saisissez l’adresse de votre Nextcloud. Le dossier Joplin de votre compte sera utilisé ; créez-le dans Nextcloud avant la première connexion.",lang));
     }

@@ -9,7 +9,7 @@
 
 **jeremdevgit** 开发的 Windows 原生笔记应用，提供受 Liquid Glass 启发的明暗主题和八种语言。支持通过系统剪贴板复制、剪切和粘贴文字，可连接通用 Nextcloud、WebDAV 及 Joplin Cloud/Server 服务，未预设任何私人服务器。本地数据使用 SQLCipher 加密。**目前尚未实现 Joplin 的全部功能**；详情见 [COMPATIBILITY.md](COMPATIBILITY.md)。
 
-👉 **[下载 Windows 版 Carnet de notes](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetDeNotes-0.4.1-Windows-x64.zip`，免安装程序）
+👉 **[下载 Windows 版 Carnet de notes](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetDeNotes-0.5.0-Windows-x64-Setup.exe`，安装程序）
 
 ![包含演示笔记的深色主题](screenshots/en/liquid-glass-dark.png)
 
@@ -19,7 +19,7 @@
 
 ## 安装与本地加密
 
-解压 Windows ZIP 后运行 `CarnetDeNotes.exe`。仅使用本地功能不需要账号或管理员权限。程序未签名，需要可用的 OpenGL 驱动。在 Windows 11 上会尝试启用 Mica；否则仍可使用渐变和半透明面板。
+运行安装程序（按用户安装，无需管理员权限），然后从开始菜单打开 **Carnet de notes**；卸载时会保留加密的笔记本。仅使用本地功能不需要账号或管理员权限。程序未签名，需要可用的 OpenGL 驱动。在 Windows 11 上会尝试启用 Mica；否则仍可使用渐变和半透明面板。
 
 现有 0.3 配置仍位于同一加密数据目录，并沿用 Windows 凭据管理器中的原有条目。新程序无需复制或转换配置即可打开它们。
 
@@ -39,10 +39,10 @@
 
 新账户默认在打开后自动同步，解锁期间每五分钟重试一次。无网络或 VPN 时，本地笔记仍可编辑。凭据保存在加密的本地库中。已通过 Nextcloud 35.0.2 和 Joplin Server 3.7.1 的隔离测试；整体兼容性仍处于实验阶段。
 
-**本地 SQLCipher 加密不等于 Joplin 端到端加密（E2EE）。程序会拒绝 E2EE 目标、共享笔记本和 HTML 笔记，不会关闭现有加密。**若目标未启用 E2EE，服务器能够读取同步的内容。
+**支持 Joplin 端到端加密（E2EE）**：在同步设置中输入主密码；已与官方 Joplin CLI 3.7.1 进行双向验证。不会关闭现有目标的加密。HTML 笔记会被保留并以纯文本预览。暂不支持共享笔记本。若目标未启用 E2EE，服务器能够读取同步的内容。
 
 ## 项目状态与源码
 
-Windows 程序已编译，但尚未在真实 Windows 电脑上运行验证。目前没有与 Joplin 的可靠内存/CPU 对比，也没有安全认证。E2EE、插件、Web Clipper、富文本编辑器、OCR 等功能尚未实现。参阅 [VALIDATION.md](VALIDATION.md) 和 [SECURITY.md](SECURITY.md)。
+Windows 程序已编译，但尚未在真实 Windows 电脑上运行验证。目前没有与 Joplin 的可靠内存/CPU 对比，也没有安全认证。共享笔记本、插件、Web Clipper、富文本编辑器、OCR 等功能尚未实现。参阅 [VALIDATION.md](VALIDATION.md) 和 [SECURITY.md](SECURITY.md)。
 
 编译需要 Rust 1.95+、Microsoft C++ 构建工具和 Perl：`cargo test --locked`、`cargo clippy --locked --all-targets -- -D warnings`、`cargo build --locked --release`。原创代码采用 GPL-3.0-or-later 许可证。本项目独立开发，与 Joplin 无关联。依赖项许可证见 [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt)。公开作者：[jeremdevgit](https://github.com/jeremdevgit)。

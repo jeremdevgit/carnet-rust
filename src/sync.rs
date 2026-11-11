@@ -1,7 +1,7 @@
 //! Conservative sync-format v3 client. Never disables encryption on an existing target.
 //! Local SQLCipher encryption is distinct from Joplin's E2EE protocol.
 use crate::{
-    Error, Result,
+    Error, Result, e2ee,
     exchange::{self, Item},
     id, now,
     store::{MAX_ATTACHMENT, Note, Store, valid_id, validate_note},
@@ -39,6 +39,9 @@ pub struct Config {
     pub email: String,
     pub password: String,
     pub client_id: String,
+    /// Joplin end-to-end encryption password (master password). Empty: plain target only.
+    #[serde(default)]
+    pub e2ee_password: String,
 }
 impl Default for Config {
     fn default() -> Self {
@@ -49,6 +52,7 @@ impl Default for Config {
             email: String::new(),
             password: String::new(),
             client_id: id(),
+            e2ee_password: String::new(),
         }
     }
 }
@@ -56,6 +60,7 @@ impl Drop for Config {
     fn drop(&mut self) {
         self.password.zeroize();
         self.email.zeroize();
+        self.e2ee_password.zeroize();
     }
 }
 #[derive(Debug)]
@@ -169,6 +174,7 @@ pub fn save_config(store: &Store, config: &Config) -> Result<()> {
     if config.email.is_empty()
         || config.email.len() > 1024
         || config.password.len() > 4096
+        || config.e2ee_password.len() > 4096
         || !valid_id(&config.client_id)
     {
         return Err(Error::Invalid("sync account settings"));
@@ -268,11 +274,10 @@ fn snapshot(store: &Store) -> Result<BTreeMap<String, Record>> {
     for n in store.all_notes()? {
         let mut p: BTreeMap<String, String> =
             serde_json::from_str(&n.extra).map_err(|_| Error::Invalid("note metadata"))?;
-        if p.get("markup_language")
-            .is_some_and(|s| s != "0" && s != "1")
-        {
-            return Err(Error::Invalid("HTML notes are not supported for sync yet"));
-        }
+        let markup = match p.get("markup_language").map(String::as_str) {
+            Some("2") => "2",
+            _ => "1",
+        };
         let completed = if n.completed {
             p.get("todo_completed")
                 .and_then(|n| n.parse::<i64>().ok())
@@ -304,7 +309,7 @@ fn snapshot(store: &Store) -> Result<BTreeMap<String, Record>> {
             ),
             ("encryption_applied".into(), "0".into()),
             ("encryption_cipher_text".into(), String::new()),
-            ("markup_language".into(), "1".into()),
+            ("markup_language".into(), markup.into()),
         ]));
         put(
             &mut map,
@@ -333,6 +338,7 @@ fn snapshot(store: &Store) -> Result<BTreeMap<String, Record>> {
             ("file_extension".into(), ext),
             ("mime".into(), mime),
             ("size".into(), data.len().to_string()),
+            ("encryption_blob_encrypted".into(), "0".into()),
             ("encryption_applied".into(), "0".into()),
             ("encryption_cipher_text".into(), String::new()),
         ]));
@@ -688,7 +694,7 @@ pub fn run(store: &mut Store, config: &Config, cancel: Arc<AtomicBool>) -> Resul
     let result = (|| {
         let mut api = Api::new(store, config, cancel)?;
         api.lock()?;
-        let result = run_locked(store, &mut api);
+        let result = run_locked(store, &mut api, &config.e2ee_password);
         if let Some(dav) = &mut api.dav {
             let _ = dav.release();
         } else {
@@ -709,10 +715,12 @@ pub fn run(store: &mut Store, config: &Config, cancel: Arc<AtomicBool>) -> Resul
     result
 }
 
-fn run_locked(store: &mut Store, api: &mut Api) -> Result<Outcome> {
+fn run_locked(store: &mut Store, api: &mut Api, e2ee_password: &str) -> Result<Outcome> {
     let names = api.list()?;
     let info = api.get("info.json")?;
     let new_target = info.is_none();
+    let mut keys: Option<e2ee::Keys> = None;
+    let mut new_master_key = None;
     if let Some(info) = info {
         let info: Value =
             serde_json::from_slice(&info).map_err(|_| Error::Invalid("sync target metadata"))?;
@@ -722,9 +730,19 @@ fn run_locked(store: &mut Store, api: &mut Api) -> Result<Outcome> {
         match info["e2ee"]["value"].as_bool() {
             Some(false) => {}
             Some(true) => {
-                return Err(Error::Invalid(
-                    "Joplin E2EE target is not supported yet; nothing was uploaded",
-                ));
+                if e2ee_password.is_empty() {
+                    return Err(Error::Invalid(
+                        "this Joplin target uses end-to-end encryption: enter its master password",
+                    ));
+                }
+                keys = Some(
+                    e2ee::Keys::unlock(&info, e2ee_password).map_err(|e| match e {
+                        Error::Unlock => {
+                            Error::Invalid("wrong Joplin end-to-end encryption password")
+                        }
+                        other => other,
+                    })?,
+                );
             }
             None => {
                 return Err(Error::Invalid(
@@ -760,6 +778,14 @@ fn run_locked(store: &mut Store, api: &mut Api) -> Result<Outcome> {
         ));
     }
     store.set_setting("sync_identity", &fingerprint)?;
+    if new_target && !e2ee_password.is_empty() {
+        if e2ee_password.chars().count() < 12 {
+            return Err(Error::PasswordPolicy);
+        }
+        let (k, entity) = e2ee::Keys::create(e2ee_password)?;
+        keys = Some(k);
+        new_master_key = Some(entity);
+    }
     let local = snapshot(store)?;
     let mut remote = BTreeMap::new();
     let mut total = 0usize;
@@ -771,6 +797,14 @@ fn run_locked(store: &mut Store, api: &mut Api) -> Result<Outcome> {
         if total > MAX_TOTAL {
             return Err(Error::Invalid("remote snapshot exceeds limits"));
         }
+        let data = if name.ends_with(".md") {
+            match decrypt_item(keys.as_ref(), data)? {
+                Some(d) => d,
+                None => continue,
+            }
+        } else {
+            data
+        };
         let r = record(name, data)?;
         if [0, 1, 2, 4, 5, 6].contains(&r.kind) {
             remote.insert(name.clone(), r);
@@ -794,6 +828,7 @@ fn run_locked(store: &mut Store, api: &mut Api) -> Result<Outcome> {
             put(&mut remote, path, data)?;
         }
     }
+    decrypt_blobs(keys.as_ref(), &mut remote)?;
     remote.retain(|p, r| {
         r.kind != 0
             || p.strip_prefix(".resource/")
@@ -866,7 +901,11 @@ fn run_locked(store: &mut Store, api: &mut Api) -> Result<Outcome> {
         apply_remote(store, &local, &remote, &incoming)?;
     }
     if new_target {
-        let info = json!({"version":3,"e2ee":{"value":false,"updatedTime":0},"activeMasterKeyId":{"value":"","updatedTime":0},"masterKeys":[],"ppk":{"value":null,"updatedTime":0},"appMinVersion":"3.7.0","revisionServiceEnabled":{"value":true,"updatedTime":0},"revisionServiceTtlDays":{"value":90,"updatedTime":0}});
+        let (enabled, active, master_keys, at) = match (&keys, new_master_key) {
+            (Some(k), Some(mk)) => (true, k.active.clone(), vec![mk], now()),
+            _ => (false, String::new(), vec![], 0),
+        };
+        let info = json!({"version":3,"e2ee":{"value":enabled,"updatedTime":at},"activeMasterKeyId":{"value":active,"updatedTime":at},"masterKeys":master_keys,"ppk":{"value":null,"updatedTime":0},"appMinVersion":"3.7.0","revisionServiceEnabled":{"value":true,"updatedTime":0},"revisionServiceTtlDays":{"value":90,"updatedTime":0}});
         api.put(
             "info.json",
             &serde_json::to_vec(&info).map_err(|_| Error::Invalid("sync metadata"))?,
@@ -881,7 +920,10 @@ fn run_locked(store: &mut Store, api: &mut Api) -> Result<Outcome> {
     outgoing.sort_by_key(|p| (!p.starts_with(".resource/"), p.clone()));
     for path in &outgoing {
         if let Some(r) = local.get(path) {
-            api.put(path, &r.data)?;
+            match &keys {
+                Some(k) => api.put(path, &encrypt_for_upload(k, path, &r.data)?)?,
+                None => api.put(path, &r.data)?,
+            }
         } else {
             api.delete(path)?;
             deleted += 1;
@@ -901,6 +943,227 @@ fn run_locked(store: &mut Store, api: &mut Api) -> Result<Outcome> {
         deleted,
     })
 }
+/// Keys kept in clear by Joplin on encrypted items (`BaseItem.serializeForSync`).
+const CLEAR_KEYS: [&str; 10] = [
+    "id",
+    "note_id",
+    "tag_id",
+    "parent_id",
+    "share_id",
+    "updated_time",
+    "deleted_time",
+    "type_",
+    "is_locked",
+    "extracted_resource_ids",
+];
+
+// Joplin 3.7 table columns (title and body are written separately).
+const NOTE_FIELDS: &[&str] = &[
+    "id",
+    "parent_id",
+    "created_time",
+    "updated_time",
+    "is_conflict",
+    "latitude",
+    "longitude",
+    "altitude",
+    "author",
+    "source_url",
+    "is_todo",
+    "todo_due",
+    "todo_completed",
+    "source",
+    "source_application",
+    "application_data",
+    "order",
+    "user_created_time",
+    "user_updated_time",
+    "encryption_cipher_text",
+    "encryption_applied",
+    "markup_language",
+    "is_shared",
+    "share_id",
+    "conflict_original_id",
+    "master_key_id",
+    "user_data",
+    "deleted_time",
+    "is_locked",
+    "extracted_resource_ids",
+    "type_",
+];
+const FOLDER_FIELDS: &[&str] = &[
+    "id",
+    "created_time",
+    "updated_time",
+    "user_created_time",
+    "user_updated_time",
+    "encryption_cipher_text",
+    "encryption_applied",
+    "parent_id",
+    "is_shared",
+    "share_id",
+    "master_key_id",
+    "icon",
+    "user_data",
+    "deleted_time",
+    "type_",
+];
+const RESOURCE_FIELDS: &[&str] = &[
+    "id",
+    "mime",
+    "filename",
+    "created_time",
+    "updated_time",
+    "user_created_time",
+    "user_updated_time",
+    "file_extension",
+    "encryption_cipher_text",
+    "encryption_applied",
+    "encryption_blob_encrypted",
+    "size",
+    "is_shared",
+    "share_id",
+    "master_key_id",
+    "user_data",
+    "blob_updated_time",
+    "ocr_text",
+    "ocr_details",
+    "ocr_status",
+    "ocr_error",
+    "ocr_driver_id",
+    "is_locked",
+    "type_",
+];
+const TAG_FIELDS: &[&str] = &[
+    "id",
+    "created_time",
+    "updated_time",
+    "user_created_time",
+    "user_updated_time",
+    "encryption_cipher_text",
+    "encryption_applied",
+    "is_shared",
+    "parent_id",
+    "user_data",
+    "type_",
+];
+const NOTE_TAG_FIELDS: &[&str] = &[
+    "id",
+    "note_id",
+    "tag_id",
+    "created_time",
+    "updated_time",
+    "user_created_time",
+    "user_updated_time",
+    "encryption_cipher_text",
+    "encryption_applied",
+    "is_shared",
+    "type_",
+];
+
+/// Returns the plain serialised form of a remote item, decrypting it when needed.
+/// Item types other than notes, notebooks, resources, tags and tag links are ignored (`None`).
+fn decrypt_item(keys: Option<&e2ee::Keys>, data: Vec<u8>) -> Result<Option<Vec<u8>>> {
+    let text = std::str::from_utf8(&data).map_err(|_| Error::Invalid("sync item is not UTF-8"))?;
+    let outer = exchange::parse_item_raw(text)?;
+    if !["1", "2", "4", "5", "6"].contains(&outer.get("type_")) {
+        return Ok(None);
+    }
+    if outer.number("encryption_applied")? == 0 {
+        return Ok(Some(data));
+    }
+    let keys = keys.ok_or(Error::Invalid(
+        "encrypted item on a target without end-to-end encryption",
+    ))?;
+    let plain = e2ee::decrypt_string(keys, outer.get("encryption_cipher_text"))?;
+    let mut item = exchange::parse_item_raw(plain.as_str())?;
+    if item.get("id") != outer.get("id") {
+        return Err(Error::Invalid("encrypted item identifier mismatch"));
+    }
+    item.props
+        .insert("updated_time".into(), outer.get("updated_time").into());
+    // The plain text was serialised before encryption; only reset fields it actually carries.
+    for (k, v) in [("encryption_applied", "0"), ("encryption_cipher_text", "")] {
+        if let Some(p) = item.props.get_mut(k) {
+            *p = v.into();
+        }
+    }
+    exchange::serialize(&item.title, &item.body, item.props).map(Some)
+}
+
+/// Decrypts attachment payloads whose (already decrypted) descriptor says the blob is encrypted.
+fn decrypt_blobs(keys: Option<&e2ee::Keys>, remote: &mut BTreeMap<String, Record>) -> Result<()> {
+    let encrypted: Vec<String> = remote
+        .iter()
+        .filter(|(_, r)| r.kind == 4)
+        .filter_map(|(p, r)| parse(&r.data).ok().map(|i| (p, i)))
+        .filter(|(_, i)| i.get("encryption_blob_encrypted") == "1")
+        .map(|(p, _)| p.trim_end_matches(".md").to_string())
+        .collect();
+    for id in encrypted {
+        let keys = keys.ok_or(Error::Invalid(
+            "encrypted attachment on a target without end-to-end encryption",
+        ))?;
+        let blob_path = format!(".resource/{id}");
+        if let Some(blob) = remote.get(&blob_path) {
+            let plain = e2ee::decrypt_file(keys, &blob.data)?;
+            put(remote, blob_path, plain.to_vec())?;
+        }
+        let path = format!("{id}.md");
+        let mut item = parse(&remote[&path].data)?;
+        item.props
+            .insert("encryption_blob_encrypted".into(), "0".into());
+        if let Some(blob) = remote.get(&format!(".resource/{id}")) {
+            item.props
+                .insert("size".into(), blob.data.len().to_string());
+        }
+        let data = exchange::serialize(&item.title, &item.body, item.props)?;
+        put(remote, path, data)?;
+    }
+    Ok(())
+}
+
+/// Produces what Joplin uploads when end-to-end encryption is enabled.
+fn encrypt_for_upload(keys: &e2ee::Keys, path: &str, data: &[u8]) -> Result<Vec<u8>> {
+    if path.starts_with(".resource/") {
+        return e2ee::encrypt_file(keys, data);
+    }
+    let mut item = parse(data)?;
+    if item.get("type_") == "4" {
+        item.props
+            .insert("encryption_blob_encrypted".into(), "1".into());
+    }
+    let plain = Zeroizing::new(exchange::serialize(
+        &item.title,
+        &item.body,
+        item.props.clone(),
+    )?);
+    let text = std::str::from_utf8(&plain).map_err(|_| Error::Invalid("sync item"))?;
+    let cipher = e2ee::encrypt_string(keys, text)?;
+    // Joplin serialises every column of the item type, empty unless kept in clear; its
+    // database rejects encrypted items whose NOT NULL columns (mime, ...) are missing.
+    let fields = match item.get("type_") {
+        "1" => NOTE_FIELDS,
+        "2" => FOLDER_FIELDS,
+        "4" => RESOURCE_FIELDS,
+        "5" => TAG_FIELDS,
+        "6" => NOTE_TAG_FIELDS,
+        _ => return Err(Error::Invalid("sync item type")),
+    };
+    let mut reduced: BTreeMap<String, String> = fields
+        .iter()
+        .map(|k| (k.to_string(), String::new()))
+        .collect();
+    for k in CLEAR_KEYS {
+        if let Some(v) = item.props.get(k) {
+            reduced.insert(k.to_string(), v.clone());
+        }
+    }
+    reduced.insert("encryption_applied".into(), "1".into());
+    reduced.insert("encryption_cipher_text".into(), cipher);
+    exchange::serialize("", "", reduced)
+}
+
 fn baseline_set(store: &Store, path: &str, hash: &str) -> Result<()> {
     store.conn.execute("INSERT INTO sync_baseline VALUES(?1,?2) ON CONFLICT(path) DO UPDATE SET hash=excluded.hash",params![path,hash])?;
     Ok(())
@@ -922,11 +1185,8 @@ fn apply_remote(
                 if record.kind == 0 {
                     resource_ids.insert(path.trim_start_matches(".resource/").to_string());
                 } else {
-                    let item = parse(&record.data)?;
-                    if !item.get("share_id").is_empty() {
-                        return Err(Error::Invalid("shared notebooks are not supported yet"));
-                    }
-                    changed.push(item);
+                    // Items of notebooks shared through Joplin Server keep their share_id in props.
+                    changed.push(parse(&record.data)?);
                 }
             }
             None => {
@@ -966,10 +1226,8 @@ fn apply_remote(
         )?;
     }
     for item in changed.iter().filter(|i| i.get("type_") == "1") {
-        if item.number("markup_language")? > 1 {
-            return Err(Error::Invalid(
-                "HTML notes require rich-text support; sync cancelled",
-            ));
+        if item.number("markup_language")? > 2 {
+            return Err(Error::Invalid("unknown note format; sync cancelled"));
         }
         let n = Note {
             id: item.get("id").into(),
@@ -1161,6 +1419,7 @@ mod tests {
             automatic: false,
             password: String::new(),
             client_id: id(),
+            e2ee_password: String::new(),
         };
         let url = endpoint(&c).unwrap();
         assert_eq!(
@@ -1206,6 +1465,7 @@ mod tests {
             email: "private-mail-sentinel@example.org".into(),
             password: "Private account credential sentinel".into(),
             client_id: id(),
+            e2ee_password: String::new(),
         };
         save_config(&store, &config).unwrap();
         assert_eq!(load_config(&store).unwrap().email, config.email);
@@ -1283,10 +1543,111 @@ mod tests {
             email: "demo".into(),
             password: std::env::var("CARNET_TEST_DAV_PASSWORD").expect("isolated WebDAV password"),
             client_id: id(),
+            e2ee_password: String::new(),
         };
         assert!(matches!(
             run(&mut store, &config, Arc::new(AtomicBool::new(false))).unwrap(),
             Outcome::Complete { .. }
+        ));
+    }
+    /// Carnet creates a new end-to-end encrypted target; the Joplin client must then open it.
+    #[test]
+    #[ignore = "requires an empty isolated WebDAV directory"]
+    fn new_e2ee_target_for_joplin() {
+        let server = std::env::var("CARNET_TEST_DAV").expect("isolated DAV URL");
+        assert!(server.starts_with("http://127.0.0.1:"));
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(&dir.path().join("a"), &id()).unwrap();
+        let config = Config {
+            target: Target::WebDav,
+            automatic: false,
+            server,
+            email: "demo".into(),
+            password: std::env::var("CARNET_TEST_DAV_PASSWORD").unwrap(),
+            client_id: id(),
+            e2ee_password: std::env::var("CARNET_TEST_E2EE_PASSWORD").unwrap(),
+        };
+        let book = store.create_notebook("FromCarnet", None).unwrap();
+        let mut note = store.create_note(&book, "SecretFromCarnet", false).unwrap();
+        note.body = "Encrypted by Carnet".into();
+        store.save(&mut note, "interop").unwrap();
+        let cancel = Arc::new(AtomicBool::new(false));
+        assert!(matches!(
+            run(&mut store, &config, cancel.clone()).unwrap(),
+            Outcome::Complete { .. }
+        ));
+        let api = Api::new(&store, &config, cancel.clone()).unwrap();
+        let mut api = api;
+        let info: Value = serde_json::from_slice(&api.get("info.json").unwrap().unwrap()).unwrap();
+        assert_eq!(info["e2ee"]["value"], true);
+        let raw = String::from_utf8(api.get(&format!("{}.md", note.id)).unwrap().unwrap()).unwrap();
+        assert!(!raw.contains("Encrypted by Carnet") && raw.contains("encryption_applied: 1"));
+    }
+
+    /// Two-way check with the official Joplin client on an end-to-end encrypted WebDAV target.
+    /// The target must already contain a note titled "JoplinE2EE" with body "BodyFromJoplin" and
+    /// one attachment; afterwards the Joplin client must find "CarnetE2EE".
+    #[test]
+    #[ignore = "requires an isolated WebDAV target prepared by the Joplin client"]
+    fn joplin_e2ee_webdav_interop() {
+        let server = std::env::var("CARNET_TEST_DAV").expect("isolated DAV URL");
+        assert!(server.starts_with("http://127.0.0.1:"));
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(&dir.path().join("a"), &id()).unwrap();
+        let mut config = Config {
+            target: Target::WebDav,
+            automatic: false,
+            server,
+            email: "demo".into(),
+            password: std::env::var("CARNET_TEST_DAV_PASSWORD").unwrap(),
+            client_id: id(),
+            e2ee_password: "wrong password 123".into(),
+        };
+        let cancel = Arc::new(AtomicBool::new(false));
+        assert!(matches!(
+            run(&mut store, &config, cancel.clone()),
+            Err(Error::Invalid(
+                "wrong Joplin end-to-end encryption password"
+            ))
+        ));
+        config.e2ee_password = std::env::var("CARNET_TEST_E2EE_PASSWORD").unwrap();
+        assert!(matches!(
+            run(&mut store, &config, cancel.clone()).unwrap(),
+            Outcome::Complete { .. }
+        ));
+        let notes = store.all_notes().unwrap();
+        let from_joplin = notes
+            .iter()
+            .find(|n| n.title == "JoplinE2EE")
+            .expect("decrypted Joplin note");
+        assert!(
+            from_joplin.body.contains("BodyFromJoplin"),
+            "{}",
+            from_joplin.body
+        );
+        let attachments: i64 = store
+            .conn
+            .query_row("SELECT count(*) FROM resources", [], |r| r.get(0))
+            .unwrap();
+        assert!(attachments >= 1);
+        let book = store.notebooks().unwrap()[0].id.clone();
+        let mut note = store.create_note(&book, "CarnetE2EE", false).unwrap();
+        let resource = store
+            .add_attachment("from-carnet.txt", b"Attachment written by Carnet")
+            .unwrap();
+        note.body = format!("BodyFromCarnet é漢🙂\n\n[Attachment](:/{resource})");
+        store.save(&mut note, "interop").unwrap();
+        assert!(
+            matches!(run(&mut store, &config, cancel.clone()).unwrap(), Outcome::Complete { uploaded, .. } if uploaded >= 3)
+        );
+        // A second pass must be a no-op: decrypted remote items hash like the local ones.
+        assert!(matches!(
+            run(&mut store, &config, cancel).unwrap(),
+            Outcome::Complete {
+                uploaded: 0,
+                downloaded: 0,
+                deleted: 0
+            }
         ));
     }
     fn roundtrip_scenario(server: String, target: Target, email: String, password: String) {
@@ -1301,6 +1662,7 @@ mod tests {
             email,
             password,
             client_id: id(),
+            e2ee_password: String::new(),
         };
         let book = a.create_notebook("Demonstration", None).unwrap();
         let mut note = a

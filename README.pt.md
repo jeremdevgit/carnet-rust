@@ -9,7 +9,7 @@
 
 Aplicativo nativo de notas para Windows, criado por **jeremdevgit**, com tema claro e escuro inspirado em Liquid Glass e oito idiomas. Copiar, recortar e colar usam a área de transferência do sistema. Há conexão genérica com Nextcloud, WebDAV e Joplin Cloud/Server, sem servidor privado predefinido. Os dados locais são criptografados com SQLCipher. **A paridade completa com o Joplin ainda não foi alcançada**; veja [COMPATIBILITY.md](COMPATIBILITY.md).
 
-👉 **[Baixar Carnet de notes para Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.1-Windows-x64.zip`, aplicativo portátil)
+👉 **[Baixar Carnet de notes para Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.5.0-Windows-x64-Setup.exe`, instalador)
 
 ![Tema escuro com notas de demonstração](screenshots/en/liquid-glass-dark.png)
 
@@ -19,7 +19,7 @@ Aplicativo nativo de notas para Windows, criado por **jeremdevgit**, com tema cl
 
 ## Instalação e proteção local
 
-Extraia o ZIP para Windows e execute `CarnetDeNotes.exe`. O uso local não exige conta nem privilégios de administrador. O executável não é assinado e precisa de um driver OpenGL funcional. No Windows 11, o aplicativo solicita Mica; caso contrário, gradientes e painéis translúcidos continuam disponíveis.
+Execute o instalador (por usuário, sem privilégios de administrador) e abra o **Carnet de notes** pelo menu Iniciar; a desinstalação mantém seus cadernos criptografados. O uso local não exige conta nem privilégios de administrador. O executável não é assinado e precisa de um driver OpenGL funcional. No Windows 11, o aplicativo solicita Mica; caso contrário, gradientes e painéis translúcidos continuam disponíveis.
 
 Os perfis 0.3 permanecem na mesma pasta criptografada e mantêm a mesma entrada no Gerenciador de Credenciais do Windows. O novo executável os abre sem copiar ou converter o perfil.
 
@@ -39,10 +39,10 @@ Há cadernos e subcadernos, notas Markdown com prévia, tarefas com vencimento, 
 
 Em contas novas, a sincronização automática começa após a abertura e tenta novamente a cada cinco minutos enquanto o cofre estiver aberto. As notas locais continuam editáveis sem rede ou VPN. As credenciais ficam no cofre criptografado. Testes isolados com Nextcloud 35.0.2 e Joplin Server 3.7.1 passaram; a compatibilidade geral ainda é experimental.
 
-**A criptografia local SQLCipher não é a criptografia de ponta a ponta (E2EE) do Joplin. Destinos E2EE, cadernos compartilhados e notas HTML são recusados sem desativar a criptografia existente.** Sem E2EE, o servidor pode ler o conteúdo sincronizado.
+**A criptografia de ponta a ponta (E2EE) do Joplin é suportada**: informe a senha mestra nas configurações de sincronização; verificada nos dois sentidos com o cliente oficial Joplin CLI 3.7.1. A criptografia de um destino existente nunca é desativada. Notas HTML são mantidas e exibidas como texto. O compartilhamento de cadernos ainda não está disponível. Sem E2EE, o servidor pode ler o conteúdo sincronizado.
 
 ## Estado e código-fonte
 
-O executável Windows foi compilado, mas não executado em um PC Windows real. Não há comparação confiável de RAM/CPU com o Joplin nem certificação de segurança. E2EE, plugins, Web Clipper, editor de texto avançado, OCR e outros recursos ainda faltam. Veja [VALIDATION.md](VALIDATION.md) e [SECURITY.md](SECURITY.md).
+O executável Windows foi compilado, mas não executado em um PC Windows real. Não há comparação confiável de RAM/CPU com o Joplin nem certificação de segurança. Compartilhamento de cadernos, plugins, Web Clipper, editor de texto avançado, OCR e outros recursos ainda faltam. Veja [VALIDATION.md](VALIDATION.md) e [SECURITY.md](SECURITY.md).
 
 Para compilar: Rust 1.95+, ferramentas C++ da Microsoft e Perl; `cargo test --locked`, `cargo clippy --locked --all-targets -- -D warnings`, `cargo build --locked --release`. Código original GPL-3.0-or-later. Projeto independente, sem afiliação com o Joplin. Licenças das dependências em [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt). Autor público: [jeremdevgit](https://github.com/jeremdevgit).

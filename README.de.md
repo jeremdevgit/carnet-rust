@@ -9,7 +9,7 @@
 
 Native Notizbuch-App für Windows von **jeremdevgit**, mit einer von Liquid Glass inspirierten hellen und dunklen Oberfläche in acht Sprachen. Die App unterstützt Kopieren, Ausschneiden und Einfügen über die Zwischenablage des Systems. Sie kann sich mit Nextcloud, WebDAV und Joplin Cloud/Server verbinden. Es ist kein privater Server voreingestellt. Die lokalen Daten werden mit SQLCipher verschlüsselt. **Die vollständige Funktionsgleichheit mit Joplin ist noch nicht erreicht**; Einzelheiten stehen in [COMPATIBILITY.md](COMPATIBILITY.md).
 
-👉 **[Carnet de notes für Windows herunterladen](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.1-Windows-x64.zip`, portable App)
+👉 **[Carnet de notes für Windows herunterladen](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.5.0-Windows-x64-Setup.exe`, Installationsprogramm)
 
 ![Dunkles Design mit Beispielnotizen](screenshots/en/liquid-glass-dark.png)
 
@@ -19,7 +19,7 @@ Native Notizbuch-App für Windows von **jeremdevgit**, mit einer von Liquid Glas
 
 ## Installation und lokaler Tresor
 
-Das Windows-ZIP entpacken und `CarnetDeNotes.exe` starten. Für die lokale Nutzung sind weder ein Konto noch Administratorrechte erforderlich. Die ausführbare Datei ist nicht signiert und benötigt einen funktionierenden OpenGL-Treiber. Unter Windows 11 wird Mica angefordert; andernfalls bleiben Farbverläufe und durchscheinende Bereiche verfügbar.
+Das Installationsprogramm ausführen (pro Benutzer, ohne Administratorrechte) und **Carnet de notes** über das Startmenü öffnen; bei der Deinstallation bleiben die verschlüsselten Notizbücher erhalten. Für die lokale Nutzung sind weder ein Konto noch Administratorrechte erforderlich. Die ausführbare Datei ist nicht signiert und benötigt einen funktionierenden OpenGL-Treiber. Unter Windows 11 wird Mica angefordert; andernfalls bleiben Farbverläufe und durchscheinende Bereiche verfügbar.
 
 Bestehende 0.3-Profile bleiben im selben verschlüsselten Datenordner und behalten denselben Eintrag im Windows-Anmeldeinformationsmanager. Die neue Programmdatei öffnet sie ohne Kopie oder Profilkonvertierung.
 
@@ -39,10 +39,10 @@ Notizbücher und Unterordner, Markdown-Notizen und Vorschau, Aufgaben mit Fälli
 
 Nach dem Öffnen synchronisieren neue Konten automatisch und versuchen es alle fünf Minuten erneut, solange der Tresor geöffnet ist. Ohne Netzwerk oder VPN lassen sich lokale Notizen weiter bearbeiten. Zugangsdaten bleiben im verschlüsselten Tresor. Die Kompatibilität wurde mit isolierten Instanzen von Nextcloud 35.0.2 und Joplin Server 3.7.1 getestet; sie ist weiterhin experimentell.
 
-**Lokale SQLCipher-Verschlüsselung ist keine Joplin-Ende-zu-Ende-Verschlüsselung (E2EE). E2EE-Ziele, geteilte Notizbücher und HTML-Notizen werden abgelehnt, ohne bestehende Verschlüsselung abzuschalten.** Auf einem Ziel ohne E2EE kann der Server synchronisierte Inhalte lesen.
+**Joplin-Ende-zu-Ende-Verschlüsselung (E2EE) wird unterstützt**: Master-Passwort in den Synchronisierungseinstellungen eingeben; in beide Richtungen mit dem offiziellen Joplin CLI 3.7.1 geprüft. Die Verschlüsselung eines bestehenden Ziels wird nie abgeschaltet. HTML-Notizen bleiben erhalten und werden als Text angezeigt. Das Teilen von Notizbüchern ist noch nicht verfügbar. Auf einem Ziel ohne E2EE kann der Server synchronisierte Inhalte lesen.
 
 ## Status und Quellcode
 
-Der Windows-Build wurde kompiliert, aber noch nicht auf einem echten Windows-PC ausgeführt. Es gibt keinen belastbaren RAM-/CPU-Vergleich mit Joplin und keine Sicherheitszertifizierung. E2EE, Plugins, Web Clipper, Rich-Text-Editor, OCR und weitere Funktionen fehlen noch. Siehe [VALIDATION.md](VALIDATION.md) und [SECURITY.md](SECURITY.md).
+Der Windows-Build wurde kompiliert, aber noch nicht auf einem echten Windows-PC ausgeführt. Es gibt keinen belastbaren RAM-/CPU-Vergleich mit Joplin und keine Sicherheitszertifizierung. Teilen von Notizbüchern, Plugins, Web Clipper, Rich-Text-Editor, OCR und weitere Funktionen fehlen noch. Siehe [VALIDATION.md](VALIDATION.md) und [SECURITY.md](SECURITY.md).
 
 Zum Bauen: Rust 1.95+, Microsoft C++ Build Tools und Perl; `cargo test --locked`, `cargo clippy --locked --all-targets -- -D warnings`, `cargo build --locked --release`. Der ursprüngliche Code steht unter GPL-3.0-or-later. Unabhängiges Projekt ohne Zugehörigkeit zu Joplin; Lizenzen der Abhängigkeiten stehen in [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt). Öffentlicher Autor: [jeremdevgit](https://github.com/jeremdevgit).

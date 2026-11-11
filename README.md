@@ -9,7 +9,7 @@
 
 Native Windows notebooks by **jeremdevgit**, with a Liquid Glass inspired light/dark interface and eight languages. System text clipboard support is enabled. Generic account connections support Nextcloud, WebDAV and Joplin Cloud/Server. Local data remains SQLCipher encrypted. **Full Joplin parity is not complete**; see [COMPATIBILITY.md](COMPATIBILITY.md).
 
-👉 **[Download Carnet de notes for Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.1-Windows-x64.zip`, portable application)
+👉 **[Download Carnet de notes for Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.5.0-Windows-x64-Setup.exe`, installer)
 
 ![Carnet de notes dark theme with demonstration notes](screenshots/en/liquid-glass-dark.png)
 
@@ -19,7 +19,7 @@ Native Windows notebooks by **jeremdevgit**, with a Liquid Glass inspired light/
 
 ## Run and unlock
 
-Extract the Windows ZIP and run `CarnetDeNotes.exe`. No administrator rights or account are required for local use. The executable is unsigned and requires an OpenGL desktop driver. Mica is requested on Windows 11; translucent panels and gradients provide a fallback.
+Run the installer (per user, no administrator rights), then open **Carnet de notes** from the Start menu. Uninstalling keeps your encrypted notebooks. No account is required for local use. The executable is unsigned and requires an OpenGL desktop driver. Mica is requested on Windows 11; translucent panels and gradients provide a fallback.
 
 Existing 0.3 profiles remain in the same encrypted data directory and keep the same Windows Credential Manager entry. The new executable opens them without copying or converting the profile.
 
@@ -54,15 +54,15 @@ Settings → Change passphrase can switch between verified master-password prote
 
 Credentials/sessions stay encrypted locally. New accounts default to sync after opening and every five minutes **while unlocked**. Offline notes stay editable and a later interval retries when the network/VPN is available. Editing account fields does not apply them until Save or Connect and sync. The worker temporarily suspends editing during sync and is cancellable. HTTP is loopback-only, redirects are refused and TLS verification stays enabled.
 
-Isolated integration scenarios cover Nextcloud 35.0.2 WebDAV and Joplin Server 3.7.1/PostgreSQL 17, two encrypted profiles, notebook/note/task/tag/attachment round trips, conflicts, trash/deletion and E2EE refusal. Shared SYNC locks coexist with Joplin clients; EXCLUSIVE migration locks block sync. DAV ETag conditions reject concurrent overwrites/deletions. Official Joplin CLI 3.7.1 exchanged unencrypted Markdown notebooks and notes with Carnet de notes in both directions on isolated Nextcloud. Compatibility remains experimental.
+Isolated integration scenarios cover Nextcloud 35.0.2 WebDAV and Joplin Server 3.7.1/PostgreSQL 17, two encrypted profiles, notebook/note/task/tag/attachment round trips, conflicts, trash/deletion and Joplin end-to-end encryption. E2EE was verified both ways with the official Joplin CLI 3.7.1: notes, notebooks, tags and attachments encrypted by Joplin are read by Carnet, those encrypted by Carnet are read by Joplin, and a new encrypted target created by Carnet opens in Joplin. Shared SYNC locks coexist with Joplin clients; EXCLUSIVE migration locks block sync. DAV ETag conditions reject concurrent overwrites/deletions. Official Joplin CLI 3.7.1 exchanged unencrypted Markdown notebooks and notes with Carnet de notes in both directions on isolated Nextcloud. Compatibility remains experimental.
 
-**Local SQLCipher is separate from Joplin E2EE. E2EE targets, shared notebooks and HTML notes remain unsupported and are refused without disabling encryption.** The server can read synced content on an E2EE-disabled target. Format 3 is required; complete snapshots are capped at 10,000 records/256 MiB and two minutes per attempt. Incoming changes get encrypted recovery copies. Conflicts require an explicit choice. Disappearing metadata or a batch deleting at least 90% of local records triggers a fail-safe stop.
+**Joplin end-to-end encryption (E2EE) is supported**: enter the master password in the sync settings to use an encrypted target, or to create a new encrypted target. Carnet reads Joplin's current methods (KeyV1, StringV1, FileV1) and the legacy SJCL AES-CCM ones, and writes the current ones; the obsolete OCB2 methods are refused. Encryption is never disabled on an existing target. Local SQLCipher encryption remains separate. HTML notes from Joplin are kept, synced and shown as a plain-text preview. Items of notebooks shared through Joplin Server keep their share; sharing itself and notebooks shared with E2EE (which need the share's key pair) are not supported yet. Without E2EE the server can read synced content. Format 3 is required; complete snapshots are capped at 10,000 records/256 MiB and two minutes per attempt. Incoming changes get encrypted recovery copies. Conflicts require an explicit choice. Disappearing metadata or a batch deleting at least 90% of local records triggers a fail-safe stop.
 
 ## Validation and remaining work
 
 See [VALIDATION.md](VALIDATION.md) and [SECURITY.md](SECURITY.md). Windows CI compiles and runs the Rust tests natively; the desktop GUI has not been manually verified on a Windows PC. No comparative Windows RAM/CPU measurement or security certification is claimed.
 
-Joplin E2EE, full plugin compatibility, Web Clipper, rich text, OCR, drawings, ENEX/OneNote import, HTML/PDF export, reminders, profile selection and several other features remain unimplemented. This is a functional development milestone, not a completed full rewrite.
+Full plugin compatibility, notebook sharing, Web Clipper, rich text, OCR, drawings, ENEX/OneNote import, HTML/PDF export, reminders, profile selection and several other features remain unimplemented. This is a functional development milestone, not a completed full rewrite.
 
 ## Build
 
@@ -74,7 +74,7 @@ cargo clippy --locked --all-targets -- -D warnings
 cargo build --locked --release
 ```
 
-`tools/package.ps1` builds the portable ZIP. The Windows workflow only builds/tests and uploads an artifact; no release is published automatically.
+`tools/package.ps1` builds the Windows installer with Inno Setup 6. The Windows workflow builds, tests, installs and uninstalls it, then uploads an artifact; no release is published automatically.
 
 ## License
 

@@ -22,6 +22,36 @@ pub fn tr(key: &str, lang: usize) -> &str {
 }
 pub const TEXTS: &[[&str; 8]] = &[
     [
+        "Mot de passe de chiffrement de bout en bout (facultatif)",
+        "End-to-end encryption password (optional)",
+        "Contraseña de cifrado de extremo a extremo (opcional)",
+        "Passwort für Ende-zu-Ende-Verschlüsselung (optional)",
+        "Password di crittografia end-to-end (facoltativa)",
+        "Senha de criptografia de ponta a ponta (opcional)",
+        "端到端加密密码（可选）",
+        "エンドツーエンド暗号化のパスワード（任意）",
+    ],
+    [
+        "Indiquez le mot de passe maître si la cible Joplin est chiffrée. Sur une cible vide, il active le chiffrement compatible Joplin (12 caractères minimum).",
+        "Enter the master password if the Joplin target is encrypted. On an empty target it turns on Joplin-compatible encryption (at least 12 characters).",
+        "Indica la contraseña maestra si el destino de Joplin está cifrado. En un destino vacío activa el cifrado compatible con Joplin (mínimo 12 caracteres).",
+        "Geben Sie das Master-Passwort ein, wenn das Joplin-Ziel verschlüsselt ist. Bei einem leeren Ziel aktiviert es Joplin-kompatible Verschlüsselung (mindestens 12 Zeichen).",
+        "Inserisci la password principale se la destinazione Joplin è crittografata. Su una destinazione vuota attiva la crittografia compatibile con Joplin (almeno 12 caratteri).",
+        "Informe a senha mestra se o destino do Joplin estiver criptografado. Em um destino vazio, ela ativa a criptografia compatível com o Joplin (mínimo de 12 caracteres).",
+        "如果 Joplin 同步目标已加密，请输入主密码。对于空目标，它会启用与 Joplin 兼容的加密（至少 12 个字符）。",
+        "Joplin の同期先が暗号化されている場合はマスターパスワードを入力してください。空の同期先では Joplin 互換の暗号化を有効にします（12 文字以上）。",
+    ],
+    [
+        "Note HTML de Joplin : aperçu en texte simple, le code HTML est modifiable dans l’éditeur.",
+        "Joplin HTML note: plain-text preview; the HTML source can be edited in the editor.",
+        "Nota HTML de Joplin: vista previa en texto simple; el código HTML se puede editar en el editor.",
+        "Joplin-HTML-Notiz: Vorschau als reiner Text; der HTML-Quelltext kann im Editor bearbeitet werden.",
+        "Nota HTML di Joplin: anteprima in testo semplice; il codice HTML è modificabile nell’editor.",
+        "Nota HTML do Joplin: pré-visualização em texto simples; o código HTML pode ser editado no editor.",
+        "Joplin HTML 笔记：以纯文本预览，可在编辑器中修改 HTML 源代码。",
+        "Joplin の HTML ノート：プレーンテキストでプレビューします。HTML ソースはエディターで編集できます。",
+    ],
+    [
         "Carnets",
         "Notebooks",
         "Cuadernos",

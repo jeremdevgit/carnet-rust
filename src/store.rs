@@ -487,9 +487,11 @@ impl Store {
             return Err(Error::Invalid("attachment extension"));
         }
         let id = id();
+        let at = crate::exchange::iso(crate::now())?;
+        let extra = serde_json::json!({ "created_time": at, "updated_time": at, "blob_updated_time": crate::now().to_string() }).to_string();
         self.conn.execute(
-            "INSERT INTO resources VALUES(?1,?2,?3,'application/octet-stream',?4,'{}')",
-            params![id, title, extension, data],
+            "INSERT INTO resources VALUES(?1,?2,?3,'application/octet-stream',?4,?5)",
+            params![id, title, extension, data, extra],
         )?;
         Ok(id)
     }

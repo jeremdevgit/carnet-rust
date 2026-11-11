@@ -788,6 +788,16 @@ impl App {
                             "Les liens externes et les images distantes sont désactivés.",
                             lang,
                         ));
+                        let is_html = serde_json::from_str::<std::collections::BTreeMap<String, String>>(&n.extra)
+                            .ok()
+                            .is_some_and(|m| m.get("markup_language").is_some_and(|v| v == "2"));
+                        if is_html {
+                            ui.small(tr("Note HTML de Joplin : aperçu en texte simple, le code HTML est modifiable dans l’éditeur.", lang));
+                            let text = carnet_rust::html_to_text(&n.body);
+                            egui::ScrollArea::vertical().id_salt("preview").show(ui, |ui| {
+                                ui.label(text);
+                            });
+                        } else {
                         // Intercept EVERY Markdown link. No arbitrary shell/URL handler is invoked.
                         let rendered = self.media.prepare(&self.store, ui.ctx(), &n.body);
                         self.cache.link_hooks_clear();
@@ -818,6 +828,7 @@ impl App {
                             {
                                 navigate = Some(id.to_string());
                             }
+                        }
                         }
                     } else {
                         ui.horizontal_wrapped(|ui| {

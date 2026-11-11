@@ -9,7 +9,7 @@
 
 Aplicación nativa Windows con tema Liquid Glass y ocho idiomas. Incluye copiar/cortar/pegar texto desde el portapapeles del sistema. Conexión genérica con Nextcloud, WebDAV o Joplin Cloud/Server, sin servidor privado predefinido.
 
-👉 **[Descargar Carnet de notes para Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.4.1-Windows-x64.zip`, aplicación portátil)
+👉 **[Descargar Carnet de notes para Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.5.0-Windows-x64-Setup.exe`, instalador)
 
 ![Tema oscuro de Carnet de notes con notas de demostración](screenshots/en/liquid-glass-dark.png)
 
@@ -17,7 +17,7 @@ Aplicación nativa Windows con tema Liquid Glass y ocho idiomas. Incluye copiar/
 
 *Capturas de la interfaz real con datos de demostración, tomadas en un entorno de prueba sin pantalla.*
 
-Extrae el ZIP y abre CarnetDeNotes.exe. Por defecto, los datos locales se cifran con SQLCipher y una clave aleatoria guardada en el Administrador de credenciales de Windows. El uso sin conexión no requiere una segunda contraseña. La protección depende de la sesión del sistema; no exige Windows Hello al abrir. Bloquea Windows al dejar el equipo. El bloqueo automático está desactivado en este modo.
+Ejecuta el instalador (por usuario, sin derechos de administrador) y abre Carnet de notes desde el menú Inicio; desinstalar conserva tus cuadernos cifrados. Por defecto, los datos locales se cifran con SQLCipher y una clave aleatoria guardada en el Administrador de credenciales de Windows. El uso sin conexión no requiere una segunda contraseña. La protección depende de la sesión del sistema; no exige Windows Hello al abrir. Bloquea Windows al dejar el equipo. El bloqueo automático está desactivado en este modo.
 
 Los perfiles 0.3 permanecen en la misma carpeta cifrada y conservan la misma entrada del Administrador de credenciales de Windows. El nuevo ejecutable los abre sin copiar ni convertir el perfil.
 
@@ -27,11 +27,11 @@ Para Nextcloud, introduce la dirección HTTPS de tu servidor, el usuario y una c
 
 La sincronización automática se inicia al abrir y reintenta cada 5 minutos mientras el almacén esté abierto. Las notas siguen disponibles sin red/VPN. Los cambios de cuenta requieren Guardar o Conectar y sincronizar. Las credenciales permanecen dentro del almacén cifrado. Pruebas aisladas: Nextcloud 35.0.2 y Joplin Server 3.7.1, conflictos, adjuntos y eliminaciones. La compatibilidad es experimental.
 
-**El cifrado local no es E2EE Joplin. Los destinos E2EE, cuadernos compartidos y notas HTML todavía se rechazan.** El servidor puede leer las notas sincronizadas si E2EE está desactivado. No se desactiva nunca el cifrado de un destino existente.
+**El cifrado de extremo a extremo (E2EE) de Joplin está soportado**: indica la contraseña maestra en los ajustes de sincronización; verificado en ambos sentidos con el cliente oficial Joplin CLI 3.7.1. Las notas HTML se conservan y se muestran como texto. Compartir cuadernos aún no está disponible. El servidor puede leer las notas sincronizadas si E2EE está desactivado. No se desactiva nunca el cifrado de un destino existente.
 
 Las copias portátiles piden una contraseña propia para poder restaurarlas en otro dispositivo. Copiar únicamente el perfil no copia la clave del sistema. Conservar las contraseñas de copias anteriores. Las copias automáticas no se purgan; al pasar de clave del sistema a contraseña maestra, se crea una copia bajo la nueva contraseña. Los antiguos instantáneos bajo la clave retirada no usan esa nueva contraseña.
 
-Notas Markdown, cuadernos, tareas, etiquetas, búsqueda, historial, papelera, adjuntos y vistas previas PNG/JPEG. Exportaciones Markdown/JEX y adjuntos exportados en claro. Faltan E2EE, editor enriquecido, extensiones, OCR y otras funciones: COMPATIBILITY.md.
+Notas Markdown, cuadernos, tareas, etiquetas, búsqueda, historial, papelera, adjuntos y vistas previas PNG/JPEG. Exportaciones Markdown/JEX y adjuntos exportados en claro. Faltan compartir cuadernos, editor enriquecido, extensiones, OCR y otras funciones: COMPATIBILITY.md.
 
 El ejecutable fue compilado para Windows, sin firma; ejecución nativa y Gestor de credenciales de Windows todavía pendientes de verificación real. Sin mediciones comparativas de RAM/CPU ni certificación de seguridad. Véanse SECURITY.md y VALIDATION.md.
 
