@@ -1601,7 +1601,7 @@ mod tests {
             email: "demo".into(),
             password: std::env::var("CARNET_TEST_DAV_PASSWORD").unwrap(),
             client_id: id(),
-            e2ee_password: "wrong password 123".into(),
+            e2ee_password: crate::e2ee::tests::random_password(),
         };
         let cancel = Arc::new(AtomicBool::new(false));
         assert!(matches!(

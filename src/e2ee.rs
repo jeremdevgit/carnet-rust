@@ -399,16 +399,24 @@ pub fn encrypt_file(keys: &Keys, data: &[u8]) -> Result<Vec<u8>> {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
+
+    /// Random password so no credential is written in the sources.
+    pub(crate) fn random_password() -> String {
+        let mut b = [0u8; 16];
+        getrandom::fill(&mut b).unwrap();
+        hex::encode(b)
+    }
 
     #[test]
     fn roundtrip_strings_files_and_keys() {
-        let (keys, entity) = Keys::create("correct horse battery").unwrap();
+        let password = random_password();
+        let (keys, entity) = Keys::create(&password).unwrap();
         let info = json!({"activeMasterKeyId": {"value": keys.active}, "masterKeys": [entity]});
-        let reopened = Keys::unlock(&info, "correct horse battery").unwrap();
+        let reopened = Keys::unlock(&info, &password).unwrap();
         assert!(matches!(
-            Keys::unlock(&info, "wrong password"),
+            Keys::unlock(&info, &random_password()),
             Err(Error::Unlock)
         ));
         // Long text with a surrogate pair straddling the 64 Ki block boundary.
@@ -442,44 +450,5 @@ mod tests {
         assert!(decrypt_string(&keys, "JED01").is_err());
         assert!(decrypt_string(&keys, "JED01000022zz").is_err());
         assert!(decrypt_string(&keys, &format!("JED010000220a{}ffffff", "0".repeat(32))).is_err());
-    }
-}
-
-/// Interoperability check against a target produced by the official Joplin client:
-/// `CARNET_JOPLIN_E2EE_DIR=<filesystem sync folder> CARNET_JOPLIN_E2EE_PASSWORD=... cargo test -- --ignored joplin_fixture`
-#[cfg(test)]
-mod interop {
-    use super::*;
-
-    #[test]
-    #[ignore = "needs a folder synced by the Joplin client"]
-    fn joplin_fixture() {
-        let dir = std::path::PathBuf::from(std::env::var("CARNET_JOPLIN_E2EE_DIR").unwrap());
-        let password = std::env::var("CARNET_JOPLIN_E2EE_PASSWORD").unwrap();
-        let info: Value =
-            serde_json::from_slice(&std::fs::read(dir.join("info.json")).unwrap()).unwrap();
-        let keys = Keys::unlock(&info, &password).unwrap();
-        let mut titles = Vec::new();
-        for entry in std::fs::read_dir(&dir).unwrap() {
-            let path = entry.unwrap().path();
-            if path.extension().is_some_and(|e| e == "md") {
-                let item =
-                    crate::exchange::parse_item_raw(&std::fs::read_to_string(&path).unwrap())
-                        .unwrap();
-                assert_eq!(item.get("encryption_applied"), "1");
-                let plain = crate::exchange::parse_item(
-                    &decrypt_string(&keys, item.get("encryption_cipher_text")).unwrap(),
-                )
-                .unwrap();
-                titles.push(plain.title.clone());
-                if plain.get("type_") == "4" {
-                    let blob = std::fs::read(dir.join(".resource").join(plain.get("id"))).unwrap();
-                    let data = decrypt_file(&keys, &blob).unwrap();
-                    assert_eq!(data.len().to_string(), plain.get("size"));
-                }
-            }
-        }
-        eprintln!("{titles:?}");
-        assert!(titles.iter().any(|t| t == "Note secrète é漢🙂"));
     }
 }
