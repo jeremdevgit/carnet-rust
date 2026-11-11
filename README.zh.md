@@ -1,10 +1,11 @@
-[English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
+<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
+
+# Carnet de notes
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet de notes 0.4.1
+[English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
 
-<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 **jeremdevgit** 开发的 Windows 原生笔记应用，提供受 Liquid Glass 启发的明暗主题和八种语言。支持通过系统剪贴板复制、剪切和粘贴文字，可连接通用 Nextcloud、WebDAV 及 Joplin Cloud/Server 服务，未预设任何私人服务器。本地数据使用 SQLCipher 加密。**目前尚未实现 Joplin 的全部功能**；详情见 [COMPATIBILITY.md](COMPATIBILITY.md)。
 

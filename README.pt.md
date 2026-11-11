@@ -1,10 +1,11 @@
-[English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
+<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
+
+# Carnet de notes
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet de notes 0.4.1
+[English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
 
-<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 Aplicativo nativo de notas para Windows, criado por **jeremdevgit**, com tema claro e escuro inspirado em Liquid Glass e oito idiomas. Copiar, recortar e colar usam a área de transferência do sistema. Há conexão genérica com Nextcloud, WebDAV e Joplin Cloud/Server, sem servidor privado predefinido. Os dados locais são criptografados com SQLCipher. **A paridade completa com o Joplin ainda não foi alcançada**; veja [COMPATIBILITY.md](COMPATIBILITY.md).
 

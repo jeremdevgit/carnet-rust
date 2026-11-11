@@ -1,10 +1,11 @@
-[English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
+<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
+
+# Carnet de notes
 
 [![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
 
-# Carnet de notes 0.4.1
+[English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
 
-<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
 
 Application native de notes Windows, par **jeremdevgit**, avec un thème inspiré de **Liquid Glass**, en huit langues. Copier/couper/coller du texte utilise maintenant le presse-papiers système. Connexion générique Nextcloud, WebDAV ou Joplin Cloud/Server, sans serveur personnel prédéfini. Le stockage local reste chiffré avec SQLCipher. **La parité complète avec Joplin n'est pas encore atteinte** : [suivi détaillé](COMPATIBILITY.md).
 
@@ -85,8 +86,23 @@ cargo build --locked --release
 
 Le programme est dans `target/release/CarnetDeNotes.exe`. Le workflow Windows construit un artefact sans publier de Release. Le script `tools/package.ps1` prépare le ZIP portable.
 
-## Mes logiciels
-
-[Profil public jeremdevgit](https://github.com/jeremdevgit) : Suite libre, Batailles de France, Pomme, Ludothèque, rJb, Boîte à outils et [JMeca](https://github.com/jeremdevgit/jmeca).
+## Licence
 
 Code original GPL-3.0-or-later. Aucun code source, logo ou icône Joplin incorporé. Projet indépendant, sans affiliation à Joplin. Référence fonctionnelle : [Joplin Desktop v3.7.22](https://github.com/laurent22/joplin/releases/tag/v3.7.22). Police et dépendances : licences dans LICENSE, THIRD-PARTY-NOTICES.txt et assets/.
+
+## Mes autres logiciels
+
+Tous libres, gratuits et sans publicité — [github.com/jeremdevgit](https://github.com/jeremdevgit) :
+
+| Logiciel | Plateforme | En bref |
+|---|---|---|
+| [AutoDex](https://github.com/jeremdevgit/autodex) | Windows, macOS, Linux | Jeu de collection de voitures avec reconnaissance de photos sur l'appareil |
+| [Boîte à outils](https://github.com/jeremdevgit/boite-a-outils) | Windows, macOS | Entretien de l'ordinateur, nettoyage et recherche de fichiers |
+| [Decklight](https://github.com/jeremdevgit/decklight) | Windows, macOS, Linux | Stream Deck virtuel avec contrôle USB |
+| [JMeca](https://github.com/jeremdevgit/jmeca) | Windows, macOS, Linux | Suivi d'entretien de véhicules chiffré |
+| [LJ Hub](https://github.com/jeremdevgit/lj-hub) | Windows, macOS, Linux | Gestionnaire de profils pour appareils Logitech |
+| [Pomme](https://github.com/jeremdevgit/pomme) | Windows | Lecteur de musique Apple Music et fichiers locaux |
+| [rJb](https://github.com/jeremdevgit/rjb) | Windows | Contrôle de l'éclairage RGB |
+| [Ludothèque](https://github.com/jeremdevgit/ludotheque) | macOS | Bibliothèque et lanceur de jeux |
+| [Suite Libre](https://jeremdevgit.github.io/suite-libre/) | Navigateur | Six outils sans compte |
+| [Batailles de France](https://github.com/jeremdevgit/batailles-de-france) | Navigateur | Jeu de stratégie en temps réel |
