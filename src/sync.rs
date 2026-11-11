@@ -103,7 +103,7 @@ fn record(path: &str, data: Vec<u8>) -> Result<Record> {
     };
     Ok(Record {
         data: Zeroizing::new(data),
-        hash: format!("{:x}", Sha256::digest(&bytes)),
+        hash: hex::encode(Sha256::digest(&bytes)),
         kind,
     })
 }
@@ -468,7 +468,7 @@ impl Api {
             serde_json::to_vec(&(&config.server, &config.email, &config.password))
                 .map_err(|_| Error::Invalid("session binding"))?,
         );
-        let binding = format!("{:x}", Sha256::digest(serialized.as_slice()));
+        let binding = hex::encode(Sha256::digest(serialized.as_slice()));
         if let Some(cached) = store.setting("sync_session")? {
             let cached = Zeroizing::new(cached);
             if let Ok(mut cached) = serde_json::from_str::<SessionCache>(cached.as_str())
@@ -765,10 +765,9 @@ fn run_locked(store: &mut Store, api: &mut Api, e2ee_password: &str) -> Result<O
             "missing sync metadata on non-empty resource directory",
         ));
     }
-    let fingerprint = format!(
-        "{:x}",
-        Sha256::digest(format!("{}:{}", api.base, api.user_id).as_bytes())
-    );
+    let fingerprint = hex::encode(Sha256::digest(
+        format!("{}:{}", api.base, api.user_id).as_bytes(),
+    ));
     if store
         .setting("sync_identity")?
         .is_some_and(|s| s != fingerprint)

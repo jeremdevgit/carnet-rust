@@ -18,7 +18,7 @@ impl PreviewCache {
         ctx: &egui::Context,
         body: &str,
     ) -> &'a str {
-        let key = format!("{:x}", Sha256::digest(body.as_bytes()));
+        let key = hex::encode(Sha256::digest(body.as_bytes()));
         if key == self.key {
             return &self.rendered;
         }
