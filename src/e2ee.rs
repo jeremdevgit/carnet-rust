@@ -65,7 +65,10 @@ fn gcm_open(password: &[u8], envelope: &str, iterations: u32) -> Result<Zeroizin
     let key = derive512(password, &salt, iterations);
     let cipher = Aes256Gcm::new_from_slice(key.as_ref()).map_err(|_| bad("key"))?;
     cipher
-        .decrypt(Nonce::from_slice(&iv), ct.as_slice())
+        .decrypt(
+            &Nonce::try_from(iv.as_slice()).map_err(|_| bad("encrypted block"))?,
+            ct.as_slice(),
+        )
         .map(Zeroizing::new)
         .map_err(|_| Error::Unlock)
 }
@@ -76,7 +79,7 @@ fn gcm_seal(password: &[u8], plain: &[u8], iterations: u32) -> Result<String> {
     let key = derive512(password, &salt, iterations);
     let cipher = Aes256Gcm::new_from_slice(key.as_ref()).map_err(|_| bad("key"))?;
     let ct = cipher
-        .encrypt(Nonce::from_slice(&iv), plain)
+        .encrypt(&Nonce::from(iv), plain)
         .map_err(|_| bad("encryption failed"))?;
     Ok(json!({"salt": B64.encode(salt), "iv": B64.encode(iv), "ct": B64.encode(ct)}).to_string())
 }
@@ -119,16 +122,16 @@ fn sjcl_open(password: &[u8], envelope: &str) -> Result<Zeroizing<Vec<u8>>> {
     let out = match (ks, l) {
         (128, 2) => Ccm::<Aes128, U8, U13>::new_from_slice(&key[..16])
             .ok()
-            .and_then(|c| c.decrypt(nonce.into(), ct.as_slice()).ok()),
+            .and_then(|c| c.decrypt(nonce.try_into().ok()?, ct.as_slice()).ok()),
         (128, 3) => Ccm::<Aes128, U8, U12>::new_from_slice(&key[..16])
             .ok()
-            .and_then(|c| c.decrypt(nonce.into(), ct.as_slice()).ok()),
+            .and_then(|c| c.decrypt(nonce.try_into().ok()?, ct.as_slice()).ok()),
         (256, 2) => Ccm::<Aes256, U8, U13>::new_from_slice(&key[..])
             .ok()
-            .and_then(|c| c.decrypt(nonce.into(), ct.as_slice()).ok()),
+            .and_then(|c| c.decrypt(nonce.try_into().ok()?, ct.as_slice()).ok()),
         (256, 3) => Ccm::<Aes256, U8, U12>::new_from_slice(&key[..])
             .ok()
-            .and_then(|c| c.decrypt(nonce.into(), ct.as_slice()).ok()),
+            .and_then(|c| c.decrypt(nonce.try_into().ok()?, ct.as_slice()).ok()),
         _ => return Err(bad("legacy key size")),
     };
     out.map(Zeroizing::new).ok_or(Error::Unlock)
@@ -442,6 +445,16 @@ pub(crate) mod tests {
             String::from_utf16(&js_unescape("a%20b%E9%u6F22%uD83D%uDE42")).unwrap(),
             "a bé漢🙂"
         );
+    }
+
+    #[test]
+    fn legacy_sjcl_ccm_known_answers() {
+        // Vectors generated with Node's AES-CCM (8-byte tag, 13-byte nonce), as SJCL does.
+        let e128 = r#"{"iv":"ZmVkY2JhOTg3NjU0MzIxMA==","v":1,"iter":1000,"ks":128,"ts":64,"mode":"ccm","adata":"","cipher":"aes","salt":"MDEyMzQ1Njc4OWFiY2RlZg==","ct":"FYKvMBPMhnY/DiEd+Aik9nHARvJ6zbs="}"#;
+        let e256 = r#"{"iv":"ZmVkY2JhOTg3NjU0MzIxMA==","v":1,"iter":1000,"ks":256,"ts":64,"mode":"ccm","adata":"","cipher":"aes","salt":"MDEyMzQ1Njc4OWFiY2RlZg==","ct":"Q4SrtAOW1F807NQxKTwU1c1fdLYCbaI="}"#;
+        assert_eq!(&sjcl_open(b"correct horse", e128).unwrap()[..], b"Bonjour CCM 128");
+        assert_eq!(&sjcl_open(b"correct horse", e256).unwrap()[..], b"Bonjour CCM 256");
+        assert!(sjcl_open(b"wrong", e256).is_err());
     }
 
     #[test]
