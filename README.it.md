@@ -1,48 +1,89 @@
-<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
+<p align="center"><img src="assets/carnet-de-notes.svg" width="112" alt=""></p>
 
-# Carnet de notes
+<h1 align="center">Carnet de notes</h1>
 
-[![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
+<p align="center"><b>Taccuini cifrati per Windows, con Markdown, attività, cronologia e sincronizzazione sperimentale con Nextcloud, WebDAV e Joplin.</b></p>
 
-[English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
+<p align="center"><img src="https://img.shields.io/badge/%F0%9F%93%92%20Productivity%20%26%20data-Windows-1a9a6c?style=flat-square" alt="Produttività e dati"> <a href="https://github.com/jeremdevgit/carnet-rust/releases"><img src="https://img.shields.io/github/v/release/jeremdevgit/carnet-rust?include_prereleases&style=flat-square&label=version" alt="version"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0--or--later-555?style=flat-square" alt="GPL-3.0-or-later"></a> <a href="https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml"><img src="https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg" alt="CI"></a></p>
 
+<p align="center"><a href="README.md">English</a> · <a href="README.fr.md">Français</a> · <a href="README.es.md">Español</a> · <a href="README.de.md">Deutsch</a> · <b>Italiano</b> · <a href="README.pt.md">Português</a> · <a href="README.zh.md">简体中文</a> · <a href="README.ja.md">日本語</a></p>
 
-Applicazione nativa per appunti Windows di **jeremdevgit**, con interfaccia chiara e scura ispirata a Liquid Glass e otto lingue. Copia, taglia e incolla usano gli appunti del sistema. La connessione è generica per Nextcloud, WebDAV e Joplin Cloud/Server, senza server privati preimpostati. I dati locali sono cifrati con SQLCipher. **La piena parità con Joplin non è ancora disponibile**: consulta [COMPATIBILITY.md](COMPATIBILITY.md).
+<p align="center"><a href="https://github.com/jeremdevgit/carnet-rust/releases/latest"><b>⬇ Scarica</b></a></p>
 
-👉 **[Scarica Carnet de notes per Windows](https://github.com/jeremdevgit/carnet-rust/releases/latest)** (`CarnetDeNotes-0.5.0-Windows-x64-Setup.exe`, programma di installazione)
+![Carnet de notes, tema scuro con note dimostrative](screenshots/en/liquid-glass-dark.png)
 
-![Tema scuro con note dimostrative](screenshots/en/liquid-glass-dark.png)
+Carnet de notes è un'app di taccuini nativa per Windows, con interfaccia chiara/scura ispirata a Liquid Glass. **Le tue note sono sempre cifrate sul disco** e puoi sincronizzarle con Nextcloud, WebDAV o Joplin Cloud/Server. La parità completa con Joplin non è ancora raggiunta: vedi [COMPATIBILITY.md](COMPATIBILITY.md).
 
-<p><img src="screenshots/en/liquid-glass-light.png" alt="Tema chiaro con note dimostrative" width="49%"> <img src="screenshots/encrypted-vault.png" alt="Configurazione del contenitore cifrato" width="49%"></p>
+<p><img src="screenshots/en/liquid-glass-light.png" alt="Tema chiaro" width="49%"> <img src="screenshots/encrypted-vault.png" alt="Configurazione della cassaforte cifrata" width="49%"></p>
 
-*Le immagini mostrano l'interfaccia reale con dati dimostrativi, acquisita in un ambiente di test senza schermo.*
+## In breve
 
-## Avvio e protezione locale
+| | |
+|---|---|
+| **Categoria** | 📒 Produttività e dati |
+| **Piattaforme** | Windows |
+| **Interfaccia** | 8 lingue (EN, FR, ES, DE, IT, PT, ZH, JA) |
+| **Prezzo** | Gratuito, open source, senza pubblicità né telemetria |
+| **Stato** | Stabile |
+| **Licenza** | [GPL-3.0-or-later](LICENSE) |
 
-Esegui il programma di installazione (per utente, senza privilegi di amministratore) e apri **Carnet de notes** dal menu Start; la disinstallazione conserva i taccuini cifrati. L'uso locale non richiede un account né privilegi di amministratore. L'eseguibile non è firmato e richiede un driver OpenGL funzionante. Su Windows 11 viene richiesto Mica; altrimenti restano disponibili sfumature e pannelli traslucidi.
+## Funzioni
 
-I profili 0.3 restano nella stessa cartella cifrata e mantengono la stessa voce in Gestione credenziali di Windows. Il nuovo eseguibile li apre senza copiare o convertire il profilo.
+- **Taccuini** ad albero (rinomina, sposta, eliminazione sicura), modifica e anteprima Markdown, link interni, duplicazione.
+- **Attività** con scadenze, **etichette** (rinomina, unisci, rimuovi), ricerca testuale, elenchi paginati.
+- **Salvataggio automatico** ogni 800 ms, Ctrl+S / Ctrl+N, 100 versioni per nota, cestino con recupero.
+- **Anteprime di immagini** locali (PNG/JPEG); immagini remote e gestori di link sconosciuti bloccati.
+- **Importazione/esportazione**: Markdown UTF-8 e JEX sperimentale (esportazioni non cifrate, con avviso).
+- Font CJK incluso per mostrare correttamente cinese e giapponese.
 
-Per impostazione predefinita, una chiave casuale di SQLCipher viene custodita in **Gestione credenziali di Windows**. Le note restano accessibili senza rete e senza una seconda password. La protezione dipende dalla sicurezza dell'account Windows; non viene richiesta Windows Hello a ogni apertura. Blocca la sessione Windows quando ti allontani. La password dell'account di sincronizzazione non è la chiave del database.
+## I tuoi dati
 
-La **password principale** è facoltativa e deve contenere almeno dodici caratteri. Non esiste un recupero di questa password. Con questa modalità il blocco automatico avviene dopo cinque minuti per impostazione predefinita; con la chiave di sistema è disattivato per impostazione predefinita. Le modalità si possono cambiare nelle impostazioni. I profili 0.2 conservano la password precedente. I profili locali 0.1 non cifrati vengono migrati, ma vecchie copie esterne e blocchi SSD non vengono cifrati retroattivamente. Il profilo ufficiale Joplin non viene modificato.
+- **Sempre cifrati**: note, allegati, cronologia, bozze, indice di ricerca, impostazioni e pagine WAL sono salvati con **SQLCipher**.
+- **Due modalità di protezione**: per impostazione predefinita una chiave casuale conservata in **Gestione credenziali di Windows** (nessuna password in più, funziona offline); oppure una **password principale** facoltativa (almeno 12 caratteri, nessuna backdoor, blocco dopo 5 minuti di inattività per impostazione predefinita).
+- **Backup cifrati** con una propria password, trasferibili su un altro PC; il ripristino conserva prima una copia di recupero cifrata.
+- Cartella del profilo: `%LOCALAPPDATA%\jeremdevgit\CarnetRust\data`. La disinstallazione la conserva.
 
-I backup portatili cifrati richiedono una **password separata per il backup**. Copiare soltanto la cartella del profilo non trasferisce la chiave custodita dal sistema; per un altro PC usa un backup portatile o sincronizza di nuovo. La perdita della credenziale di sistema può rendere inaccessibile la cache locale.
+## Sincronizzazione (sperimentale)
 
-## Funzioni e sincronizzazione
+| Servizio | Cosa serve |
+|---|---|
+| **Nextcloud** | Indirizzo HTTPS, nome utente, una *password per app* e una cartella privata `Joplin` |
+| **WebDAV** | L'URL HTTPS completo di una cartella dedicata alle note |
+| **Joplin Cloud / Server** | La preimpostazione Cloud o l'indirizzo API del tuo server e le credenziali (MFA/SSO interattivi non supportati) |
 
-Sono disponibili taccuini e sottotaccuini, note Markdown con anteprima, attività e scadenze, etichette, ricerca, cronologia, cestino, allegati e anteprime PNG/JPEG locali. Le modifiche sono salvate automaticamente. Importazione ed esportazione Markdown e JEX sperimentale sono supportate; i file esportati sono **in chiaro**.
+La sincronizzazione parte all'apertura e ogni cinque minuti finché è sbloccato; le note restano modificabili offline. **La crittografia end-to-end di Joplin è supportata** in entrambe le direzioni (verificata con Joplin CLI 3.7.1). I conflitti richiedono una scelta esplicita e un lotto che eliminerebbe il 90% delle note viene fermato per sicurezza. HTTP è consentito solo in locale, i reindirizzamenti sono rifiutati, la verifica TLS resta attiva. Senza E2EE il server può leggere i contenuti sincronizzati.
 
-- **Nextcloud:** inserisci l'indirizzo HTTPS del server, il nome utente e una password per l'app. Crea prima una cartella privata `Joplin` nei file di quell'account. L'app costruisce l'URL WebDAV; è accettato anche un URL completo `/remote.php/`.
-- **WebDAV:** usa l'URL HTTPS completo di una cartella dedicata alle note, non la radice del server o dell'account.
-- **Joplin Cloud/Server:** usa il servizio Cloud preimpostato o l'indirizzo API del tuo server e le credenziali. Accesso interattivo Cloud, MFA e SSO non sono supportati; nessun account Cloud reale è stato provato.
+## Installazione
 
-Per i nuovi account la sincronizzazione automatica parte dopo l'apertura e riprova ogni cinque minuti finché il contenitore è sbloccato. Le note locali restano modificabili senza rete o VPN. Le credenziali rimangono nel contenitore cifrato. Test isolati con Nextcloud 35.0.2 e Joplin Server 3.7.1 hanno avuto esito positivo; la compatibilità generale resta sperimentale.
+Scarica `CarnetDeNotes-<versione>-Windows-x64-Setup.exe` dalla [versione più recente](https://github.com/jeremdevgit/carnet-rust/releases/latest) ed eseguilo: per utente, senza diritti di amministratore. Serve un driver OpenGL; su Windows 11 viene usato Mica. L'eseguibile non è firmato, SmartScreen potrebbe chiedere conferma. I profili delle versioni precedenti si aprono così come sono.
 
-**La crittografia end-to-end (E2EE) di Joplin è supportata**: inserisci la password principale nelle impostazioni di sincronizzazione; verificata in entrambe le direzioni con il client ufficiale Joplin CLI 3.7.1. La cifratura di una destinazione esistente non viene mai disattivata. Le note HTML sono conservate e mostrate come testo. La condivisione dei taccuini non è ancora disponibile. Senza E2EE il server può leggere i contenuti sincronizzati.
+## Compilare
 
-## Stato e codice sorgente
+```powershell
+# Rust 1.95+, Microsoft C++ Build Tools, Perl (OpenSSL incluso)
+cargo test --locked
+cargo clippy --locked --all-targets -- -D warnings
+cargo build --locked --release
+```
 
-L'eseguibile Windows è stato compilato, ma non eseguito su un vero PC Windows. Non sono disponibili un confronto attendibile di RAM/CPU con Joplin né una certificazione di sicurezza. Mancano ancora condivisione dei taccuini, estensioni, Web Clipper, editor avanzato, OCR e altre funzioni. Consulta [VALIDATION.md](VALIDATION.md) e [SECURITY.md](SECURITY.md).
+`tools/package.ps1` crea l'installer con Inno Setup 6. La CI lo compila, testa, installa e disinstalla su Windows. Dettagli: [VALIDATION.md](VALIDATION.md).
 
-Per compilare: Rust 1.95+, strumenti C++ Microsoft e Perl; `cargo test --locked`, `cargo clippy --locked --all-targets -- -D warnings`, `cargo build --locked --release`. Codice originale GPL-3.0-or-later. Progetto indipendente, non affiliato a Joplin. Licenze delle dipendenze in [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt). Autore pubblico: [jeremdevgit](https://github.com/jeremdevgit).
+**Non ancora implementato**: plugin, condivisione dei taccuini, Web Clipper, testo formattato, OCR, disegni, importazione ENEX/OneNote, esportazione HTML/PDF, promemoria.
+
+## Licenza
+
+GPL-3.0-or-later — vedi [LICENSE](LICENSE). Implementazione indipendente senza codice, logo o icona di Joplin; non affiliata a Joplin. Le librerie e il font inclusi mantengono le proprie licenze ([THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt)).
+
+---
+
+Hai trovato una vulnerabilità? Segnalala in privato (vedi [SECURITY.md](SECURITY.md)) e non in una issue pubblica.
+
+## Altro software libero di jeremdevgit
+
+Tutti gratuiti, open source e senza pubblicità.
+
+**🛠️ Sistema e hardware** — [Boîte à outils](https://github.com/jeremdevgit/boite-a-outils) · [rJb](https://github.com/jeremdevgit/rjb) · [LJ Hub](https://github.com/jeremdevgit/lj-hub) · [Decklight](https://github.com/jeremdevgit/decklight)
+
+**📒 Produttività e dati** — [JMeca](https://github.com/jeremdevgit/jmeca) · [Suite Libre](https://jeremdevgit.github.io/suite-libre/)
+
+**🎮 Musica e giochi** — [Pomme](https://github.com/jeremdevgit/pomme) · [Ludothèque](https://github.com/jeremdevgit/ludotheque) · [AutoDex](https://github.com/jeremdevgit/autodex) · [Batailles de France](https://github.com/jeremdevgit/batailles-de-france)

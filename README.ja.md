@@ -1,48 +1,89 @@
-<p align="center"><img src="assets/carnet-de-notes.svg" alt="Carnet de notes" width="128"></p>
+<p align="center"><img src="assets/carnet-de-notes.svg" width="112" alt=""></p>
 
-# Carnet de notes
+<h1 align="center">Carnet de notes</h1>
 
-[![Windows CI](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml) [![RustSec](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml/badge.svg)](https://github.com/jeremdevgit/carnet-rust/actions/workflows/security.yml)
+<p align="center"><b>Windows 用の暗号化ノート。Markdown、ToDo、履歴に加え、Nextcloud・WebDAV・Joplin との同期（実験的）に対応。</b></p>
 
-[English](README.md) · [Français](README.fr.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português (Brasil)](README.pt.md) · [简体中文](README.zh.md) · [日本語](README.ja.md)
+<p align="center"><img src="https://img.shields.io/badge/%F0%9F%93%92%20Productivity%20%26%20data-Windows-1a9a6c?style=flat-square" alt="生産性とデータ"> <a href="https://github.com/jeremdevgit/carnet-rust/releases"><img src="https://img.shields.io/github/v/release/jeremdevgit/carnet-rust?include_prereleases&style=flat-square&label=version" alt="version"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0--or--later-555?style=flat-square" alt="GPL-3.0-or-later"></a> <a href="https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml"><img src="https://github.com/jeremdevgit/carnet-rust/actions/workflows/windows.yml/badge.svg" alt="CI"></a></p>
 
+<p align="center"><a href="README.md">English</a> · <a href="README.fr.md">Français</a> · <a href="README.es.md">Español</a> · <a href="README.de.md">Deutsch</a> · <a href="README.it.md">Italiano</a> · <a href="README.pt.md">Português</a> · <a href="README.zh.md">简体中文</a> · <b>日本語</b></p>
 
-**jeremdevgit** による Windows 向けネイティブのノートアプリです。Liquid Glass に着想を得たライト／ダークテーマと８言語に対応しています。システムのクリップボードを使ったコピー・切り取り・貼り付けができ、Nextcloud、WebDAV、Joplin Cloud/Server に汎用的に接続します。個人用サーバーは設定済みではありません。ローカルデータは SQLCipher で暗号化します。**Joplin の全機能にはまだ対応していません**。詳しくは [COMPATIBILITY.md](COMPATIBILITY.md) をご覧ください。
+<p align="center"><a href="https://github.com/jeremdevgit/carnet-rust/releases/latest"><b>⬇ ダウンロード</b></a></p>
 
-👉 **[Carnet de notes の Windows 版をダウンロード](https://github.com/jeremdevgit/carnet-rust/releases/latest)**（`CarnetDeNotes-0.5.0-Windows-x64-Setup.exe`、インストーラー）
+![Carnet de notes のダークテーマとデモ用ノート](screenshots/en/liquid-glass-dark.png)
 
-![デモノートを表示したダークテーマ](screenshots/en/liquid-glass-dark.png)
+Carnet de notes は、Liquid Glass 風のライト／ダーク画面を備えた Windows ネイティブのノートアプリです。**ノートはディスク上で常に暗号化**され、Nextcloud、WebDAV、Joplin Cloud/Server と同期できます。Joplin との完全な互換はまだです — [COMPATIBILITY.md](COMPATIBILITY.md) を参照してください。
 
-<p><img src="screenshots/en/liquid-glass-light.png" alt="デモノートを表示したライトテーマ" width="49%"> <img src="screenshots/encrypted-vault.png" alt="暗号化保管庫の設定画面" width="49%"></p>
+<p><img src="screenshots/en/liquid-glass-light.png" alt="ライトテーマ" width="49%"> <img src="screenshots/encrypted-vault.png" alt="暗号化保管庫の設定" width="49%"></p>
 
-*スクリーンショットはデモデータを使用した実際の画面を、オフスクリーンのテスト環境で撮影したものです。*
+## 概要
 
-## 導入とローカル保護
+| | |
+|---|---|
+| **カテゴリー** | 📒 生産性とデータ |
+| **対応環境** | Windows |
+| **表示言語** | 8 言語（英・仏・西・独・伊・葡・中・日） |
+| **価格** | 無料・オープンソース・広告なし・テレメトリーなし |
+| **ステータス** | 安定版 |
+| **ライセンス** | [GPL-3.0-or-later](LICENSE) |
 
-インストーラーを実行し（ユーザー単位、管理者権限不要）、スタートメニューから **Carnet de notes** を開いてください。アンインストールしても暗号化されたノートブックは残ります。ローカル利用にアカウントや管理者権限は不要です。実行ファイルは署名されておらず、正常に動作する OpenGL ドライバーが必要です。Windows 11 では Mica を要求し、利用できない場合もグラデーションと半透明パネルを表示します。
+## 機能
 
-既存の 0.3 プロファイルは同じ暗号化データフォルダーと Windows 資格情報マネージャーの登録を引き継ぎます。新しい実行ファイルでコピーや変換をせずに開けます。
+- ツリー構造の**ノートブック**（名前変更、移動、安全な削除）、Markdown の編集とプレビュー、内部リンク、複製。
+- 期限付きの **ToDo**、**タグ**（名前変更、統合、削除）、テキスト検索、ページ分割された一覧。
+- 800 ミリ秒ごとの**自動保存**、Ctrl+S / Ctrl+N、ノートごとに 100 世代の履歴、復元できるごみ箱。
+- ローカル画像（PNG/JPEG）の**プレビュー**。外部画像や未知のリンクハンドラーはブロック。
+- **インポート／エクスポート**：UTF-8 の Markdown と実験的な JEX（書き出しは暗号化されず、警告を表示）。
+- 中国語・日本語を正しく表示する CJK フォントを同梱。
 
-標準では、ランダムな SQLCipher 鍵を **Windows 資格情報マネージャー**に保存します。オフラインでも２つ目のパスワードなしでノートを利用できます。この保護は Windows アカウントの安全性に依存し、起動のたびに Windows Hello を要求するものではありません。席を離れるときは Windows をロックしてください。同期アカウントのパスワードはデータベース鍵ではありません。
+## データの扱い
 
-12 文字以上の**マスターパスワード**も任意で設定できます。紛失したパスワードを復旧する方法はありません。このモードでは標準で５分後に自動ロックし、システム鍵モードでは自動ロックが標準で無効です。設定画面で切り替えられます。0.2 版のプロファイルは既存のパスワードを維持します。ローカルの 0.1 版の平文プロファイルは暗号化して移行しますが、過去の外部コピーや SSD のブロックまでさかのぼって暗号化することはできません。公式 Joplin のプロファイルには触れません。
+- **常に暗号化**：ノート、添付、履歴、下書き、検索インデックス、設定、WAL ページは **SQLCipher** で保存されます。
+- **2 つの保護モード**：既定では **Windows 資格情報マネージャー**に保管したランダムな鍵（追加のパスワード不要、オフラインでも使用可）。または任意の**マスターパスワード**（12 文字以上、バックドアなし、既定で 5 分間操作がないとロック）。
+- 独自のパスワードで保護された**暗号化バックアップ**は別の PC に持ち出せます。復元時はまず暗号化された救済用コピーを保存します。
+- プロファイルの場所：`%LOCALAPPDATA%\jeremdevgit\CarnetRust\data`。アンインストールしても残ります。
 
-持ち運び可能な暗号化バックアップには**別のバックアップ用パスワード**が必要です。プロファイルフォルダーだけをコピーしても Windows に保存した鍵は移りません。別の PC では持ち運び可能なバックアップを復元するか、再同期してください。システムの資格情報を失うと、ローカルキャッシュを開けなくなる場合があります。
+## 同期（実験的）
 
-## 機能と同期
+| サービス | 必要なもの |
+|---|---|
+| **Nextcloud** | HTTPS アドレス、ユーザー名、*アプリパスワード*、非公開の `Joplin` フォルダー |
+| **WebDAV** | ノート専用フォルダーの完全な HTTPS URL |
+| **Joplin Cloud / Server** | Cloud のプリセット、またはサーバーの API アドレスと認証情報（対話型の MFA/SSO は非対応） |
 
-ノートブックと階層、Markdown ノートとプレビュー、期限付き To-do、タグ、検索、履歴、ごみ箱、添付ファイル、ローカル PNG/JPEG プレビューを利用できます。変更は自動保存されます。Markdown と実験的な JEX のインポート／エクスポートに対応します。エクスポートしたファイルは**暗号化されません**。
+起動時と、ロック解除中は 5 分ごとに同期します。オフラインでもノートは編集できます。**Joplin のエンドツーエンド暗号化に双方向で対応**しています（Joplin CLI 3.7.1 で検証）。競合は明示的な選択を求め、ノートの 90% を削除するような一括処理は安全のため停止します。HTTP はループバックのみ許可、リダイレクトは拒否、TLS 検証は常に有効です。E2EE を使わない場合、サーバーは同期した内容を読めます。
 
-- **Nextcloud：**HTTPS サーバーアドレス、ユーザー名、アプリ用パスワードを入力します。接続前に、そのアカウントのプライベートなファイル領域に `Joplin` フォルダーを作成してください。WebDAV アドレスは自動で組み立てられ、完全な `/remote.php/` アドレスも指定できます。
-- **WebDAV：**ノート専用フォルダーの完全な HTTPS アドレスを使用し、サーバーやアカウントのルートは指定しないでください。
-- **Joplin Cloud/Server：**Cloud プリセット、または自分のサーバーの API アドレスと認証情報を使用します。対話型 Cloud ログイン、MFA、SSO には未対応で、実際の Cloud アカウントでは未検証です。
+## インストール
 
-新しいアカウントでは起動後に自動同期し、保管庫が開いている間は５分ごとに再試行します。ネットワークや VPN がないときもローカルノートを編集できます。認証情報は暗号化した保管庫内に保存します。Nextcloud 35.0.2 と Joplin Server 3.7.1 の隔離環境でテストしましたが、一般的な互換性はまだ実験段階です。
+[最新リリース](https://github.com/jeremdevgit/carnet-rust/releases/latest)から `CarnetDeNotes-<バージョン>-Windows-x64-Setup.exe` をダウンロードして実行します。ユーザー単位のインストールで、管理者権限は不要です。OpenGL ドライバーが必要で、Windows 11 では Mica を使用します。実行ファイルは未署名のため SmartScreen が確認を求めることがあります。以前のバージョンのプロファイルはそのまま開けます。
 
-**Joplin のエンドツーエンド暗号化（E2EE）に対応しました**：同期設定でマスターパスワードを入力してください。公式 Joplin CLI 3.7.1 と双方向で確認済みです。既存の同期先の暗号化は解除しません。HTML ノートは保持され、テキストでプレビューされます。ノートブックの共有はまだ未対応です。 E2EE が無効な同期先ではサーバーが内容を読めます。
+## ソースからビルド
 
-## 状態とソースコード
+```powershell
+# Rust 1.95+、Microsoft C++ Build Tools、Perl（同梱 OpenSSL 用）
+cargo test --locked
+cargo clippy --locked --all-targets -- -D warnings
+cargo build --locked --release
+```
 
-Windows 版はコンパイル済みですが、実機の Windows ではまだ動作確認していません。Joplin との信頼できるメモリ／CPU 比較やセキュリティ認証もありません。ノートブックの共有、プラグイン、Web Clipper、リッチテキスト編集、OCR などは未実装です。[VALIDATION.md](VALIDATION.md) と [SECURITY.md](SECURITY.md) を参照してください。
+`tools/package.ps1` が Inno Setup 6 でインストーラーを作成します。CI は Windows 上でビルド、テスト、インストール、アンインストールを行います。詳細：[VALIDATION.md](VALIDATION.md)。
 
-ビルドには Rust 1.95+、Microsoft C++ Build Tools、Perl が必要です：`cargo test --locked`、`cargo clippy --locked --all-targets -- -D warnings`、`cargo build --locked --release`。オリジナルコードは GPL-3.0-or-later です。Joplin と提携していない独立したプロジェクトです。依存ライブラリのライセンスは [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt) に記載しています。公開上の作者：[jeremdevgit](https://github.com/jeremdevgit)。
+**未実装**：プラグイン、ノートブックの共有、Web Clipper、リッチテキスト、OCR、手書き、ENEX/OneNote のインポート、HTML/PDF の書き出し、リマインダー。
+
+## ライセンス
+
+GPL-3.0-or-later — [LICENSE](LICENSE) を参照。Joplin のコード、ロゴ、アイコンを含まない独自実装で、Joplin とは提携していません。同梱ライブラリとフォントはそれぞれのライセンスに従います（[THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt)）。
+
+---
+
+脆弱性を見つけたら、公開 Issue ではなく非公開で報告してください（[SECURITY.md](SECURITY.md) を参照）。
+
+## jeremdevgit のその他のフリーソフトウェア
+
+すべて無料・オープンソース・広告なし。
+
+**🛠️ システムとハードウェア** — [Boîte à outils](https://github.com/jeremdevgit/boite-a-outils) · [rJb](https://github.com/jeremdevgit/rjb) · [LJ Hub](https://github.com/jeremdevgit/lj-hub) · [Decklight](https://github.com/jeremdevgit/decklight)
+
+**📒 生産性とデータ** — [JMeca](https://github.com/jeremdevgit/jmeca) · [Suite Libre](https://jeremdevgit.github.io/suite-libre/)
+
+**🎮 音楽とゲーム** — [Pomme](https://github.com/jeremdevgit/pomme) · [Ludothèque](https://github.com/jeremdevgit/ludotheque) · [AutoDex](https://github.com/jeremdevgit/autodex) · [Batailles de France](https://github.com/jeremdevgit/batailles-de-france)
