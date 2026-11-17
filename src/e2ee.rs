@@ -452,8 +452,14 @@ pub(crate) mod tests {
         // Vectors generated with Node's AES-CCM (8-byte tag, 13-byte nonce), as SJCL does.
         let e128 = r#"{"iv":"ZmVkY2JhOTg3NjU0MzIxMA==","v":1,"iter":1000,"ks":128,"ts":64,"mode":"ccm","adata":"","cipher":"aes","salt":"MDEyMzQ1Njc4OWFiY2RlZg==","ct":"FYKvMBPMhnY/DiEd+Aik9nHARvJ6zbs="}"#;
         let e256 = r#"{"iv":"ZmVkY2JhOTg3NjU0MzIxMA==","v":1,"iter":1000,"ks":256,"ts":64,"mode":"ccm","adata":"","cipher":"aes","salt":"MDEyMzQ1Njc4OWFiY2RlZg==","ct":"Q4SrtAOW1F807NQxKTwU1c1fdLYCbaI="}"#;
-        assert_eq!(&sjcl_open(b"correct horse", e128).unwrap()[..], b"Bonjour CCM 128");
-        assert_eq!(&sjcl_open(b"correct horse", e256).unwrap()[..], b"Bonjour CCM 256");
+        assert_eq!(
+            &sjcl_open(b"correct horse", e128).unwrap()[..],
+            b"Bonjour CCM 128"
+        );
+        assert_eq!(
+            &sjcl_open(b"correct horse", e256).unwrap()[..],
+            b"Bonjour CCM 256"
+        );
         assert!(sjcl_open(b"wrong", e256).is_err());
     }
 
