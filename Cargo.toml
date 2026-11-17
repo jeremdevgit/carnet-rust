@@ -36,7 +36,7 @@ egui_commonmark = { version = "0.26", optional = true, default-features = false 
 rfd = { version = "0.18", optional = true }
 sys-locale = { version = "0.3", optional = true }
 aes-gcm = "0.11"
-base64 = "0.22"
+base64 = "0.23"
 ccm = "0.6"
 aes = "0.9"
 hex = "0.4"
